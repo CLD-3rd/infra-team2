@@ -1,5 +1,6 @@
 package com.team.infra_team2.choice.entity;
 
+import com.team.infra_team2.common.entity.BaseEntity;
 import com.team.infra_team2.question.entity.Question;
 
 import jakarta.persistence.Column;
@@ -13,7 +14,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Entity
-public class Choice {
+public class Choice extends BaseEntity {
 	
 	@Id
 	@Column(name = "choice_id")
