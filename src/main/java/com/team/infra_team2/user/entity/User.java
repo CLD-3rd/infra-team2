@@ -1,5 +1,7 @@
 package com.team.infra_team2.user.entity;
 
+import com.team.infra_team2.user.constant.UserRole;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
