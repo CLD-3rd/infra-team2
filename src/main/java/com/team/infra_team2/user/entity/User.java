@@ -1,5 +1,6 @@
 package com.team.infra_team2.user.entity;
 
+import com.team.infra_team2.common.entity.BaseEntity;
 import com.team.infra_team2.user.constant.UserRole;
 
 import jakarta.persistence.Column;
@@ -11,7 +12,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Entity
-public class User {
+public class User extends BaseEntity {
 	
 	@Id
 	@Column(name = "user_id")
