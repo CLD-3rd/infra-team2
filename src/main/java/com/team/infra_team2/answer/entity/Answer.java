@@ -2,6 +2,7 @@ package com.team.infra_team2.answer.entity;
 
 import com.team.infra_team2.common.entity.BaseEntity;
 import com.team.infra_team2.question.entity.Question;
+import com.team.infra_team2.solve.entity.Solve;
 import com.team.infra_team2.user.entity.User;
 
 import jakarta.persistence.Column;
