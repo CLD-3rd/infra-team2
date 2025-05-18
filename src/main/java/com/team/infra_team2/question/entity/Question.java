@@ -1,5 +1,6 @@
 package com.team.infra_team2.question.entity;
 
+import com.team.infra_team2.common.entity.BaseEntity;
 import com.team.infra_team2.user.entity.User;
 
 import jakarta.persistence.Column;
@@ -13,11 +14,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Entity
-public class Question {
+public class Question extends BaseEntity {
 	
 	@Id
 	@Column(name = "question_id")
-	private Integer question_id;
+	private Long id;
 	
 	@Column(name = "question_text")
 	private String question_text;

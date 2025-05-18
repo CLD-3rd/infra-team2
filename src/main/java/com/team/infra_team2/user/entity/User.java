@@ -16,7 +16,7 @@ public class User extends BaseEntity {
 	
 	@Id
 	@Column(name = "user_id")
-	private Integer id;
+	private Long id;
 	
 	private String password;
 	
