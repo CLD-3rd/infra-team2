@@ -25,7 +25,7 @@ public class Question extends BaseEntity {
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private User created_by;
+	private User user;
 	
 	@Column(name = "correct_answer")
 	private Integer correct_answer;
