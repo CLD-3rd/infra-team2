@@ -1,0 +1,19 @@
+package com.team.infra_team2.question.dto;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * 문제 등록 완료 시 프론트에 응답으로 보내는 DTO
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+public class CreateQuestionResponseDTO {
+	// 등록된 문제의 ID
+    private Long question_id;
+
+    // 응답 메시지 (예: "문제가 등록되었습니다.")
+    private String message;
+}
