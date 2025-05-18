@@ -1,6 +1,6 @@
 services:
   app:
-    build: .
+    image: hjukeboxox/infra-team2:latest
     ports:
       - "8081:8081"
     environment:
