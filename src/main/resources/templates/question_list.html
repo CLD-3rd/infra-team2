@@ -69,10 +69,10 @@
                 <tbody>
                     <tr th:each="question : ${questions}">
                         <td>
-                            <a th:href="@{'/questions/' + ${question.id}}" th:text="${question.question_text}"></a>
+                            <a th:href="@{'/questions/' + ${question.id}}" th:text="${question.questionText}"></a>
                         </td>
                         <td th:text="${question.author}"></td>
-                        <td th:text="${question.created_at}"></td>
+                        <td th:text="${question.createdAt}"></td>
                     </tr>
                 </tbody>
             </table>

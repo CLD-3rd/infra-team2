@@ -31,10 +31,10 @@
                     </thead>
                     <tbody>
                         <tr th:each="history : ${solveHistoryList}">
-                            <td th:text="'# ' + ${history.solve_id}"># 1</td>
-                            <td th:text="${history.solved_at}">2025-05-15</td>
-                            <td th:text="${history.total_question} + '문제'">10문제</td>
-                            <td th:text="${history.correct_count} + '문제'">8문제</td>
+                            <td th:text="'# ' + ${history.solveId}"># 1</td>
+                            <td th:text="${history.solvedAt}">2025-05-15</td>
+                            <td th:text="${history.totalQuestion} + '문제'">10문제</td>
+                            <td th:text="${history.correctCount} + '문제'">8문제</td>
                         </tr>
                     </tbody>
                 </table>

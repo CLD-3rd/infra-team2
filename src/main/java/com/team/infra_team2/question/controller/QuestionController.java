@@ -1,46 +1,52 @@
 package com.team.infra_team2.question.controller;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.team.infra_team2.question.dto.QuestionCreateRequestDTO;
 import com.team.infra_team2.question.dto.QuestionCreateResponseDTO;
 import com.team.infra_team2.question.service.QuestionService;
-import com.team.infra_team2.user.constant.UserRoleType;
 import com.team.infra_team2.user.entity.User;
 import com.team.infra_team2.user.repository.UserRepository;
+import com.team.infra_team2.user.security.config.auth.PrincipalDetails;
 
 import lombok.RequiredArgsConstructor;
 
-@RestController
-@RequestMapping("/api/questions")
+@Controller
 @RequiredArgsConstructor
 public class QuestionController {
-
+	
     // 서비스 주입
     private final QuestionService questionService;
     private final UserRepository userRepository;
-    @PostMapping
-    public ResponseEntity<QuestionCreateResponseDTO> createQuestion(
-            @RequestBody QuestionCreateRequestDTO requestDTO
-            // TODO: 로그인 구현 완료 시 아래 파라미터 복구
-            // , @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        // TODO: 로그인 구현 완료 시, CustomUserDetails에서 유저 꺼내서 아래 주입
-        // CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
-        // User user = customUserDetails.getUser();
-
-        // [임시 유저 객체 생성 - 테스트용]
-    	User user = User.of("mock_admin", "test1234", UserRoleType.ADMIN);
-
-
-        user = userRepository.save(user);
-
-        QuestionCreateResponseDTO responseDTO = questionService.createQuestion(requestDTO, user);
-
-        return ResponseEntity.ok(responseDTO);
+    
+    @GetMapping("/api/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String showCreateForm(Model model) {
+        model.addAttribute("question", new QuestionCreateRequestDTO());
+        return "question_form"; 
     }
+    
+    
+    @PostMapping("/api/questions")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String createQuestion(
+    		@ModelAttribute QuestionCreateRequestDTO requestDTO,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    		){    
+    	String username = principalDetails.getUsername();
+    	User user = userRepository.findByUsername(username);
+    	if (user == null) {
+    	    throw new RuntimeException("유저가 없습니다");
+    	}
+    	QuestionCreateResponseDTO responseDTO = questionService.createQuestion(requestDTO, user);
+
+        return "redirect:/questions";
+    }
+   
 }
