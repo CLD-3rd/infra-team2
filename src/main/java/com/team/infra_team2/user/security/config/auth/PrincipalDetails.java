@@ -26,7 +26,7 @@ public Collection<? extends GrantedAuthority> getAuthorities() {
 
 
 Collection<GrantedAuthority> authorites = new ArrayList<GrantedAuthority>();
-authorites.add(()-> user.getUser_role_type().getRole());
+authorites.add(()-> user.getUserRoleType().getRole());
 
 return authorites;
 }
