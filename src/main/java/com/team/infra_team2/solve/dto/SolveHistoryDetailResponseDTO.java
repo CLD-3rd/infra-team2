@@ -26,7 +26,7 @@ public class SolveHistoryDetailResponseDTO {
     public static SolveHistoryDetailResponseDTO from(Solve solve, int correctCount, int totalQuestion) {
         SolveHistoryDetailResponseDTO dto = new SolveHistoryDetailResponseDTO();
         dto.solveId = solve.getId();
-        dto.solvedAt = solve.getFinished_at();
+        dto.solvedAt = solve.getFinishedAt();
         dto.correctCount = correctCount;
         dto.totalQuestion = totalQuestion;
         return dto;

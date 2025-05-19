@@ -24,8 +24,8 @@ public class QuestionService {
 	public QuestionCreateResponseDTO createQuestion(QuestionCreateRequestDTO requestDTO, User user) {
 		//Question 엔티티 생성 및 값 주입
 	    Question question = new Question();
-	    question.setQuestion_text(requestDTO.getQuestionText());
-	    question.setCorrect_answer(requestDTO.getCorrectAnswer());
+	    question.setQuestionText(requestDTO.getQuestionText());
+	    question.setCorrectAnswer(requestDTO.getCorrectAnswer());
 	    question.setUser(user);
 	    
 	    Question savedQuestion = questionRepository.save(question);

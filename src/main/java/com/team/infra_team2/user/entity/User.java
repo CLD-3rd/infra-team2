@@ -3,6 +3,7 @@ package com.team.infra_team2.user.entity;
 import com.team.infra_team2.common.entity.BaseEntity;
 import com.team.infra_team2.user.constant.UserRoleType;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,18 +23,18 @@ public class User extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private Long id;
-	
+	private String username;
 	private String password;
 
 	@Enumerated(EnumType.STRING)
-	private UserRoleType user_role_type;
+	private UserRoleType userRoleType;
 	
 	public User() {} 
 
     private User(String username, String password, UserRoleType userRoleType) {
         this.username = username;
         this.password = password;
-        this.user_role_type = userRoleType;
+        this.userRoleType = userRoleType;
     }
 
     public static User of(String username, String password, UserRoleType userRoleType) {

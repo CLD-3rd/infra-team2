@@ -25,7 +25,7 @@ public class UserDTO {
         return new UserDTO(
             user.getUsername(),
             user.getPassword(),
-            user.getUser_role_type()
+            user.getUserRoleType()
         );
     }
 
