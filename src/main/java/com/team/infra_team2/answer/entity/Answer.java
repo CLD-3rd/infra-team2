@@ -7,6 +7,8 @@ import com.team.infra_team2.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -19,14 +21,15 @@ import lombok.Getter;
 public class Answer extends BaseEntity {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "answer_id")
 	private Long id;
 	
 	@Column(name = "selected_answer")
-	private Integer selected_answer;
+	private Integer selectedAnswer;
 	
 	@Column(name = "is_correct")
-	private Boolean is_correct;
+	private Boolean isCorrect;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
