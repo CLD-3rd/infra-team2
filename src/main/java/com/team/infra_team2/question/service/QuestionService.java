@@ -67,7 +67,7 @@ public class QuestionService {
         return GetQuestionDetailResponseDTO.from(question, choices);
     }
     
-    // TODO: "{id} 값에서 1을 뺀 값으로 다음 문제 조회" 기능 구현 필요
+    // TODO: "{id} 값에서 1을 더한 값으로 다음 문제 조회" 기능 구현 필요
     // TODO: "풀이 시작 solve 생성" 기능 구현 필요
     // TODO: "이미 solve가 존재하면 초기화 여부 질문" 기능 구현 필요
 }
