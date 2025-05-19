@@ -69,7 +69,7 @@ System.out.println(encrptedOassword);
 
 //객체 저장 중
 user.setPassword(encrptedOassword);
-user.setUser_role_type(UserRoleType.ADMIN); 
+user.setUserRoleType(UserRoleType.ADMIN); 
 userRepository.save(user);
 
 return "redirect:/";

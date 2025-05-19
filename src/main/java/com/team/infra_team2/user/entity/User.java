@@ -21,21 +21,22 @@ public class User extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long user_id;
+	@Column(name = "user_id")
+	private Long id;
 	
 	private String username;
 	
 	private String password;
 
 	@Enumerated(EnumType.STRING)
-	private UserRoleType user_role_type;
+	private UserRoleType userRoleType;
 	
 	protected User() {} 
 
     private User(String username, String password, UserRoleType userRoleType) {
         this.username = username;
         this.password = password;
-        this.user_role_type = userRoleType;
+        this.userRoleType = userRoleType;
     }
 
     public static User of(String username, String password, UserRoleType userRoleType) {
