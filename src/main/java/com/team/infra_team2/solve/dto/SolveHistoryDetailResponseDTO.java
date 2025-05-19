@@ -2,6 +2,8 @@ package com.team.infra_team2.solve.dto;
 
 import java.time.LocalDateTime;
 
+import com.team.infra_team2.solve.entity.Solve;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,15 +12,24 @@ import lombok.Setter;
 public class SolveHistoryDetailResponseDTO {
 	
 	 // solve 고유 ID
-    private Long solve_id;
+    private Long solveId;
 
     // 풀이 종료 시각 
-    private LocalDateTime solved_at;
+    private LocalDateTime solvedAt;
 
     // 총 풀이 문항 수
-    private int total_question;
+    private int totalQuestion;
 
     // 맞힌 문항 수
-    private int correct_count;
+    private int correctCount;
 	
+    public static SolveHistoryDetailResponseDTO from(Solve solve, int correctCount, int totalQuestion) {
+        SolveHistoryDetailResponseDTO dto = new SolveHistoryDetailResponseDTO();
+        dto.solveId = solve.getId();
+        dto.solvedAt = solve.getFinished_at();
+        dto.correctCount = correctCount;
+        dto.totalQuestion = totalQuestion;
+        return dto;
+    }
+
 }

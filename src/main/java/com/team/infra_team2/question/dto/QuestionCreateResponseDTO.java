@@ -1,5 +1,6 @@
 package com.team.infra_team2.question.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,9 +11,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class QuestionCreateResponseDTO {
 	// 등록된 문제의 ID
-    private Long question_id;
+    private Long questionId;
 
     // 응답 메시지 (예: "문제가 등록되었습니다.")
     private String message;
