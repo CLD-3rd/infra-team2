@@ -20,7 +20,7 @@ public class SolveHistoryController {
     public SolveHistoryListResponseDTO getHistory() {
         // 아직 인증 처리 안 됐으니까 임시 유저 객체 생성
         User dummyUser = User.of("dummy_user", "encoded_pw", UserRoleType.USER);
-        dummyUser.setUser_id(1L);
+        dummyUser.setId(1L);
 
         return solveHistoryService.getSolveHistoryByUser(dummyUser);
     }
