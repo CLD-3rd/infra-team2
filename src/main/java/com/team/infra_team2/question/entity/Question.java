@@ -23,18 +23,19 @@ import lombok.Setter;
 public class Question extends BaseEntity {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "question_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name = "question_text")
-	private String question_text;
+	private String questionText;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 	
 	@Column(name = "correct_answer")
-	private Integer correct_answer;
+	private Integer correctAnswer;
 	
 }

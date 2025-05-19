@@ -21,12 +21,13 @@ import lombok.Getter;
 public class Answer extends BaseEntity {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "answer_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name = "selected_answer")
-	private Integer selected_answer;
+	private Integer selectedAnswer;
 	
 	@Column(name = "is_correct")
 	private Boolean isCorrect;

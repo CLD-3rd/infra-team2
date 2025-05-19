@@ -20,9 +20,8 @@ public class User extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long user_id;
-	
-	private String username;
+	@Column(name = "user_id")
+	private Long id;
 	
 	private String password;
 

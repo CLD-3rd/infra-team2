@@ -24,6 +24,7 @@ import lombok.Getter;
 public class Solve extends BaseEntity {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "solve_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -36,5 +37,5 @@ public class Solve extends BaseEntity {
 	private User user;
 	
 	@Column(name = "finished_at")
-	private LocalDateTime finished_at;
+	private LocalDateTime finishedAt;
 }
