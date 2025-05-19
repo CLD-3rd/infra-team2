@@ -34,10 +34,8 @@ public class QuestionController {
         // User user = customUserDetails.getUser();
 
         // [임시 유저 객체 생성 - 테스트용]
-        User user = new User(); // 기본 생성자는 protected → 필요한 경우 임시 생성자 만들거나 setter 활용
-        user.setUsername("mock_admin");
-        user.setPassword("test1234");
-        user.setUser_role_type(UserRoleType.ADMIN);
+    	User user = User.of("mock_admin", "test1234", UserRoleType.ADMIN);
+
 
         user = userRepository.save(user);
 
