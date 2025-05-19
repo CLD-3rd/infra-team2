@@ -12,11 +12,11 @@ public class QuestionCreateRequestDTO {
 	// 1~4 중 정답 하나
 	private int correct_answer; 
 	// 보기(선지) 리스트: 총 4개 (1번 ~ 4번 보기
-	private List<ChoiceDTO> choices;
+	private List<ChoiceCreateRequestDTO> choices_create;
 	
 	@Getter 
 	@Setter
-    public static class ChoiceDTO {
+    public static class ChoiceCreateRequestDTO {
         private int choice_number;  // 1, 2, 3, 4
         private String choice_text; // 보기 텍스트
     }

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class SolveHistoryResponseDTO {
+public class SolveHistoryDetailResponseDTO {
 	
 	 // solve 고유 ID
     private Long solve_id;
