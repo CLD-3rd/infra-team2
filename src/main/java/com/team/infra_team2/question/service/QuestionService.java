@@ -42,11 +42,25 @@ public class QuestionService {
      */
     @Transactional(readOnly = true)
     public GetQuestionDetailResponseDTO getQuestionDetail(Long questionId) {
+        System.out.println("[DEBUG] getQuestionDetail 호출, questionId=" + questionId);
+
         Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new EntityNotFoundException("문제를 찾을 수 없습니다: " + questionId));
-        
-        List<Choice> choices = choiceRepository.findByQuestionIdOrderByChoice_number(questionId);
-        
+                .orElseThrow(() -> {
+                    System.err.println("[ERROR] 문제를 찾을 수 없습니다: " + questionId);
+
+                    // DB에 실제 존재하는 모든 question id 출력해보기
+                    List<Question> allQuestions = questionRepository.findAll();
+                    System.out.println("[DEBUG] 현재 DB에 존재하는 questionId 목록:");
+                    for (Question q : allQuestions) {
+                        System.out.println(" - questionId: " + q.getId());
+                    }
+
+                    return new EntityNotFoundException("문제를 찾을 수 없습니다: " + questionId);
+                });
+
+        List<Choice> choices = choiceRepository.findByQuestionIdOrderByChoiceNumber(questionId);
+
         return GetQuestionDetailResponseDTO.from(question, choices);
     }
+
 }

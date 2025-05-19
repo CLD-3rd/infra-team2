@@ -41,7 +41,7 @@ public class GetQuestionDetailResponseDTO {
             .collect(Collectors.toList());
         return new GetQuestionDetailResponseDTO(
             question.getId(),
-            question.getQuestion_text(),
+            question.getQuestionText(),
             choiceDTOList
         );
     }

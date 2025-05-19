@@ -28,7 +28,7 @@ public class GetQuestionListResponseDTO{
     public static GetQuestionListResponseDTO from(Question question) {
         return new GetQuestionListResponseDTO(
             question.getId(),
-            question.getQuestion_text(),
+            question.getQuestionText(),
             // User가 없으면 '관리자'로 표시
             question.getUser() != null ? question.getUser().getId().toString() : "관리자",
             question.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))

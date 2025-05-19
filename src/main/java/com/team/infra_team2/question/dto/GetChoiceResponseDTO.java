@@ -31,8 +31,8 @@ public class GetChoiceResponseDTO {
      */
     public static GetChoiceResponseDTO from(Choice choice) {
         return new GetChoiceResponseDTO(
-            choice.getChoice_number(),
-            choice.getChoice_text()
+            choice.getChoiceNumber(),
+            choice.getChoiceText()
         );
     }
 

@@ -15,19 +15,22 @@ import lombok.Getter;
 @AllArgsConstructor
 @Entity
 public class Question extends BaseEntity {
-	
-	@Id
-	@Column(name = "question_id")
-	private Long id;
-	
-	@Column(name = "question_text")
-	private String question_text;
-	
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-	
-	@Column(name = "correct_answer")
-	private Integer correct_answer;
-	
+
+    @Id
+    @Column(name = "question_id")
+    private Long id;
+
+    @Column(name = "question_text")
+    private String questionText;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(name = "correct_answer")
+    private Integer correctAnswer;
+
+    // JPA용 기본 생성자
+    protected Question() {
+    }
 }

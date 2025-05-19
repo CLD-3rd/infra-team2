@@ -19,5 +19,5 @@ public interface ChoiceRepository extends JpaRepository<Choice, Long> {
      * @param questionId 문제 ID
      * @return 선택지 번호 순으로 정렬된 선택지 목록
      */
-    List<Choice> findByQuestionIdOrderByChoice_number(Long questionId);
+    List<Choice> findByQuestionIdOrderByChoiceNumber(Long questionId);
 }
