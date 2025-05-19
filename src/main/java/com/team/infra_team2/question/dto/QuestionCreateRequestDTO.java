@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-public class CreateQuestionRequestDTO {
+public class QuestionCreateRequestDTO {
 
 	// 문제 내용 (예: "JVM에 대한 설명으로 옳은 것은?")
 	private String question_text;

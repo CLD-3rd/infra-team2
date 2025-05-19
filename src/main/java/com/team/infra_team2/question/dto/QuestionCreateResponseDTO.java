@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CreateQuestionResponseDTO {
+public class QuestionCreateResponseDTO {
 	// 등록된 문제의 ID
     private Long question_id;
 
