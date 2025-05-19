@@ -10,26 +10,25 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-
-@Getter
+@Data
 @Entity
-@Setter
 public class User extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private Long id;
+	
 	private String username;
+	
 	private String password;
 
 	@Enumerated(EnumType.STRING)
 	private UserRoleType userRoleType;
 	
-	public User() {} 
+	protected User() {} 
 
     private User(String username, String password, UserRoleType userRoleType) {
         this.username = username;
