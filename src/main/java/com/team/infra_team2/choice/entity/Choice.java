@@ -2,7 +2,6 @@ package com.team.infra_team2.choice.entity;
 
 import com.team.infra_team2.common.entity.BaseEntity;
 import com.team.infra_team2.question.entity.Question;
-import lombok.AccessLevel;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,11 +10,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)  // 필수: 기본 생성자 명시
 @Entity
 public class Choice extends BaseEntity {
     
