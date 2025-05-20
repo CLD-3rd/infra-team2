@@ -46,7 +46,7 @@ public class QuestionService {
         for(int i = 0; i < requestDTO.getChoicesCreate().size(); i++) {
             QuestionCreateRequestDTO.ChoiceCreateRequestDTO choiceDTO = requestDTO.getChoicesCreate().get(i);
             String choice_text = choiceDTO.getChoiceText();
-            int choice_number = choiceDTO.getChoiceNumber();
+            int choice_number = i + 1;
             
             Choice choice = new Choice();
             choice.setChoiceText(choice_text);
@@ -126,8 +126,29 @@ public class QuestionService {
         question.setQuestionText(dto.getQuestionText());
         question.setCorrectAnswer(dto.getCorrectAnswer());
 
-        // 🔥 선택지 수정은 나중에 구현해도 됨
+        // 기존 선택지 삭제
+        choiceRepository.deleteAllByQuestion(question); // question 엔티티 통째로 넘겨줌
+
+
+     // 새 선택지 등록 (choiceNumber는 서버에서 직접 부여)
+        List<Choice> newChoices = new ArrayList<>();
+        for (int i = 0; i < dto.getChoicesCreate().size(); i++) {
+            QuestionCreateRequestDTO.ChoiceCreateRequestDTO choiceDto = dto.getChoicesCreate().get(i);
+
+            int choiceNumber = i + 1; // 👈 직접 설정
+
+            Choice choice = new Choice();
+            choice.setQuestion(question);
+            choice.setChoiceNumber(choiceNumber);
+            choice.setChoiceText(choiceDto.getChoiceText());
+            choice.setIsCorrect(choiceNumber == dto.getCorrectAnswer()); // 👈 정답 여부 정확히 비교
+
+            newChoices.add(choice);
+        }
+
+        choiceRepository.saveAll(newChoices);
     }
+
 
 
 }
