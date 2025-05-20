@@ -1,5 +1,7 @@
 package com.team.infra_team2.question.controller;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -64,6 +66,28 @@ public class QuestionController {
     public String showCreateForm(Model model) {
         model.addAttribute("question", new QuestionCreateRequestDTO());
         return "question_form";
+    }
+    
+    @GetMapping("/api/questions/get/form")
+    public String questionDetailForm(Model model) {
+		Long questionId = 103L;
+		Long solveId = 1L;
+		String questionText = "What is your favorite color?";
+		
+		List<String> choices = new ArrayList<String>();
+		choices.add("Choice 1");
+		choices.add("Choice 2");
+		choices.add("Choice 3");
+		choices.add("Choice 4");
+		
+	    model.addAttribute("solveId", solveId);
+	    model.addAttribute("questionId", questionId);
+		model.addAttribute("questionText", questionText);
+	    model.addAttribute("choices", choices);
+	    model.addAttribute("currentIndex", 15);
+	    model.addAttribute("totalQuestions", 20);
+
+        return "question_detail";
     }
 
     // 문제 등록 처리 (ADMIN만 접근 가능)

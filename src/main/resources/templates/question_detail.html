@@ -46,27 +46,32 @@
 
     <!-- 문제 본문 -->
     <div class="question-box">
-        <form th:action="@{'/api/answers/' + ${question.questionId}}" method="post">
-            <h5 th:text="${question.question_text}">문제 내용 출력</h5>
-            <div class="answer-list mt-3" th:each="choice : ${question.choiceList}">
+        <form th:action="@{'/api/answers/' + ${solveId}}" method="post">
+            <h5 th:text="${questionText}">문제 내용</h5>
+            <div class="answer-list mt-3" th:each="choice, iterStat : ${choices}">
                 <div class="form-check">
                     <input class="form-check-input" type="radio"
-                           th:id="'choice' + ${choice.choiceNumber}"
-                           name="selected_answer"
-                           th:value="${choice.choiceNumber}"
+                           th:id="'choice' + ${iterStat.index}"
+                           name="selectedAnswer"
+                           th:value="${iterStat.index + 1}"
                            required>
                     <label class="form-check-label"
-                           th:for="'choice' + ${choice.choiceNumber}"
-                           th:text="${choice.choice_text}">선택지 출력</label>
+                           th:for="'choice' + ${iterStat.index}"
+                           th:text="${choice}">선택지 출력</label>
                 </div>
             </div>
+
+            <!-- 숨겨진 questionId 필드 -->
+            <input type="hidden" name="questionId" th:value="${questionId}" />
 
             <!-- 버튼들 -->
             <div class="btn-group-wrapper">
                 <button type="submit" class="btn btn-primary">다음</button>
+				<!-- TODO: 마지막 문제에서만 활성화 -->
                 <a th:href="@{/solve/finish}" class="btn btn-outline-primary">문제 풀이 종료</a>
                 <a th:href="@{'/questions/edit/' + ${question.questionId}}" class="btn btn-primary">편집</a>
                 <a th:href="@{'/questions/delete/' + ${question.questionId}}" class="btn btn-danger">삭제</a>
+
             </div>
         </form>
     </div>
