@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +16,7 @@ import com.team.infra_team2.user.entity.User;
 import com.team.infra_team2.user.repository.UserRepository;
 import com.team.infra_team2.user.security.config.auth.PrincipalDetails;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +33,7 @@ public class SolveController {
     public String startSolve(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestParam("questionId") Long questionId,
-            Model model
+            HttpSession session // 세션 주입
     ) {
         String username = principalDetails.getUsername();
         User user = userRepository.findByUsername(username);
@@ -48,10 +48,12 @@ public class SolveController {
         // 새 solve 생성
         Solve newSolve = Solve.create(user);
         solveRepository.save(newSolve);
-        model.addAttribute("currentSolveId", newSolve.getId());
+        
+     // 세션에 solveId 저장
+        session.setAttribute("solveId", newSolve.getId());
 
         // 문제 상세 페이지로 이동
-        return "redirect:/api/questions/" + questionId + "?solveId=" + newSolve.getId();
+        return "redirect:/api/questions/" + questionId;
     }
     
     @PostMapping("/finish")

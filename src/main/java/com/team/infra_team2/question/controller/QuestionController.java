@@ -17,13 +17,12 @@ import com.team.infra_team2.question.dto.GetQuestionDetailResponseDTO;
 import com.team.infra_team2.question.dto.GetQuestionListResponseDTO;
 import com.team.infra_team2.question.dto.QuestionCreateRequestDTO;
 import com.team.infra_team2.question.service.QuestionService;
-import com.team.infra_team2.solve.constant.SolveStatus;
-import com.team.infra_team2.solve.entity.Solve;
 import com.team.infra_team2.solve.repository.SolveRepository;
 import com.team.infra_team2.user.entity.User;
 import com.team.infra_team2.user.repository.UserRepository;
 import com.team.infra_team2.user.security.config.auth.PrincipalDetails;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -58,19 +57,15 @@ public class QuestionController {
     public String getQuestionDetail(
             @PathVariable(name = "questionId") Long questionId,
             @AuthenticationPrincipal PrincipalDetails principalDetails,
+            HttpSession session,
             Model model) {
         GetQuestionDetailResponseDTO response = questionService.getQuestionDetail(questionId);
         model.addAttribute("question", response);
         
-        User user = userRepository.findByUsername(principalDetails.getUsername());
-        Solve currentSolve = solveRepository.findByUserAndStatus(user, SolveStatus.IN_PROGRESS)
-                .stream()
-                .findFirst()
-                .orElse(null);
+        Long solveId = (Long) session.getAttribute("solveId");
+
         
-        if (currentSolve != null) {
-            model.addAttribute("currentSolveId", currentSolve.getId());
-        }
+        User user = userRepository.findByUsername(principalDetails.getUsername());
         
         // 진행 상태 정보 추가
         model.addAttribute("currentIndex", questionService.getCurrentIndex(questionId));

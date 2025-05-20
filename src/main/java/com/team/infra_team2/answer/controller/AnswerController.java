@@ -6,7 +6,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -19,6 +18,7 @@ import com.team.infra_team2.solve.entity.Solve;
 import com.team.infra_team2.solve.repository.SolveRepository;
 import com.team.infra_team2.user.security.config.auth.PrincipalDetails;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -35,9 +35,9 @@ public class AnswerController {
     @PreAuthorize("isAuthenticated()")
     public String submitAnswerDetail(
             @ModelAttribute AnswerSubmitDetailRequestDTO answerSubmitDetailRequest,
-            @PathVariable("solveId") Long solveId,
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            HttpSession session) {
+    	Long solveId = (Long) session.getAttribute("solveId");
         // 답안 저장
         AnswerSubmitDetailResponseDTO responseDTO =
                 answerService.submitAnswerDetail(answerSubmitDetailRequest, solveId, principalDetails);
@@ -64,9 +64,10 @@ public class AnswerController {
     @PreAuthorize("isAuthenticated()")
     @Transactional
     public String finishAnswerAndSolve(
-            @PathVariable("solveId") Long solveId,
             @ModelAttribute AnswerSubmitDetailRequestDTO answerSubmitDetailRequest,
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            HttpSession session) {
+    	Long solveId = (Long) session.getAttribute("solveId");
         
         // 1. 답안 저장
         answerService.submitAnswerDetail(answerSubmitDetailRequest, solveId, principalDetails);
