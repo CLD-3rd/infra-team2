@@ -47,7 +47,9 @@
             <div class="title">문제은행</div>
             <div class="btn-group">
                 <a th:href="@{/api/history}" class="btn btn-outline-primary">History</a>
-                <a th:href="@{/api/auth/logout}" class="btn btn-primary">Log Out</a>
+				<form th:action="@{/api/auth/logout}" method="post" style="display:inline;">
+					<button type="submit" class="btn btn-primary">Log Out</button>
+				</form>
             </div>
         </div>
 

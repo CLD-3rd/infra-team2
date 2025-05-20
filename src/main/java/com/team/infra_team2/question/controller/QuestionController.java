@@ -115,5 +115,15 @@ public class QuestionController {
         questionService.updateQuestion(id, requestDTO);
         return "redirect:/api/questions/" + id; // 수정 완료 후 상세페이지로 이동
     }
+    
+ // QuestionController.java
+
+    @PostMapping("/api/questions/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String deleteQuestion(@PathVariable("id") Long id) {
+        questionService.deleteQuestion(id);
+        return "redirect:/api/questions"; // 삭제 후 목록 페이지로 이동
+    }
+
 
 }

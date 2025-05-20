@@ -41,7 +41,9 @@
         <!-- 상단 바 -->
         <div class="header-bar">
             <div class="title">문제은행</div>
-            <a th:href="@{/api/auth/logout}" class="btn btn-primary">Log Out</a>
+			<form th:action="@{/api/auth/logout}" method="post" style="display:inline;">
+				<button type="submit" class="btn btn-primary">Log Out</button>
+			</form>
         </div>
 
         <!-- 문제 등록 폼 -->
@@ -65,7 +67,7 @@
 
                 <!-- 버튼 -->
                 <div class="btn-group-wrapper">
-                    <a th:href="@{/questions}" class="btn btn-outline-primary px-5">취소</a>
+                    <a th:href="@{/api/questions}" class="btn btn-outline-primary px-5">취소</a>
                     <button type="submit" class="btn btn-primary px-5">저장</button>
                 </div>
             </form>

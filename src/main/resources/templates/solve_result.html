@@ -12,7 +12,9 @@
     <div class="container-fluid">
         <div class="d-flex align-items-center justify-content-between py-3">
             <div class="fs-3 fw-bold">문제은행</div>
-            <a th:href="@{/api/auth/logout}" class="btn btn-primary logout-btn">Log Out</a>
+			<form th:action="@{/api/auth/logout}" method="post" style="display:inline;">
+				<button type="submit" class="btn btn-primary">Log Out</button>
+			</form>
         </div>
     </div>
 

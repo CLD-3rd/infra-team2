@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.team.infra_team2.answer.repository.AnswerRepository;
 import com.team.infra_team2.choice.entity.Choice;
 import com.team.infra_team2.choice.repository.ChoiceRepository;
 import com.team.infra_team2.question.dto.GetQuestionDetailResponseDTO;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
+    private final AnswerRepository answerRepository;
      
     /**
      * 문제 생성
@@ -148,6 +150,22 @@ public class QuestionService {
 
         choiceRepository.saveAll(newChoices);
     }
+
+    @Transactional
+    public void deleteQuestion(Long questionId) {
+        Question question = questionRepository.findById(questionId)
+            .orElseThrow(() -> new EntityNotFoundException("문제를 찾을 수 없습니다."));
+        
+        // question에 해당하는 answer 먼저 삭제
+        answerRepository.deleteAllByQuestion(question); 
+        
+        // 선택지 먼저 삭제 (FK 연결 때문)
+        choiceRepository.deleteAllByQuestion(question);
+        
+        // 문제 삭제
+        questionRepository.delete(question);
+    }
+
 
 
 

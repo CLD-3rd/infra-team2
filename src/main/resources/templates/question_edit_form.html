@@ -38,7 +38,9 @@
         <!-- 상단 바 -->
         <div class="header-bar">
             <div class="title">문제 수정</div>
-            <a th:href="@{/api/auth/logout}" class="btn btn-primary">Log Out</a>
+			<form th:action="@{/api/auth/logout}" method="post" style="display:inline;">
+				<button type="submit" class="btn btn-primary">Log Out</button>
+			</form>
         </div>
 
         <!-- 문제 수정 폼 -->
