@@ -1,17 +1,20 @@
 package com.team.infra_team2.user.response;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@NoArgsConstructor
+@Data
 public class UserLoginResponseDTO {
 
-    private String username;
-    private String message;
+	private String username;
+	private String message;
 
-    public UserLoginResponseDTO(String username, String message) {
-        this.username = username;
-        this.message = message;
-    }
+	public UserLoginResponseDTO(String username, String message) {
+		this.username = username;
+		this.message = message;
+	}
 
-    public static UserLoginResponseDTO of(String username) {
-        return new UserLoginResponseDTO(username, "로그인 되었습니다");
-    }
-    
-    }
+	public static UserLoginResponseDTO of(String username) {
+		return new UserLoginResponseDTO(username, "로그인 되었습니다");
+	}
+}
