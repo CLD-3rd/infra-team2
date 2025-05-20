@@ -22,7 +22,7 @@ public class User extends BaseEntity {
 	private Long id;
 	
 	private String username;
-	
+
 	private String password;
 
 	@Enumerated(EnumType.STRING)
@@ -39,5 +39,4 @@ public class User extends BaseEntity {
     public static User of(String username, String password, UserRoleType userRoleType) {
         return new User(username, password, userRoleType);
     }
-	
 }

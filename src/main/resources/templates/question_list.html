@@ -46,7 +46,7 @@
         <div class="header-bar">
             <div class="title">문제은행</div>
             <div class="btn-group">
-                <a th:href="@{/history}" class="btn btn-outline-primary">History</a>
+                <a th:href="@{/api/history}" class="btn btn-outline-primary">History</a>
                 <a th:href="@{/api/auth/logout}" class="btn btn-primary">Log Out</a>
             </div>
         </div>
@@ -69,7 +69,7 @@
                 <tbody>
                     <tr th:each="question : ${questions}">
                         <td>
-                            <a th:href="@{'/questions/' + ${question.id}}" th:text="${question.questionText}"></a>
+                            <a th:href="@{'/questions/' + ${question.questionId}}" th:text="${question.questionText}"></a>
                         </td>
                         <td th:text="${question.author}"></td>
                         <td th:text="${question.createdAt}"></td>
@@ -79,7 +79,7 @@
 
             <!-- 문제 입력 버튼 -->
             <div class="center-btn">
-                <a th:href="@{/questions/new}" class="btn btn-primary">문제 입력</a>
+                <a th:href="@{/api/questions/form}" class="btn btn-primary">문제 입력</a>
             </div>
 
             <!-- 페이지네이션 -->

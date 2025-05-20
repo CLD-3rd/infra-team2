@@ -17,26 +17,26 @@ import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Setter
-@NoArgsConstructor
 public class Choice extends BaseEntity {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "choice_id")
-	private Long id;
-	
-	@Column(name = "choice_text")
-	private String choice_text;
-	
-	@Column(name = "is_correct")
-	private Boolean is_correct;
-	
-	@Column(name = "choice_number")
-	private Integer choice_number;
-	
-	@ManyToOne
-	@JoinColumn(name = "question_id")
-	private Question question;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "choice_id")
+    private Long id;
+
+    @Column(name = "choice_text")
+    private String choiceText;
+
+    @Column(name = "is_correct")
+    private Boolean isCorrect;
+
+    @Column(name = "choice_number")
+    private Integer choiceNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
 }
