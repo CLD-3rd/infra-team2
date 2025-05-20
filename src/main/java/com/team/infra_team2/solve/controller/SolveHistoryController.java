@@ -42,4 +42,5 @@ public class SolveHistoryController {
 		
         return "solve_result";
     }
+	
 }
