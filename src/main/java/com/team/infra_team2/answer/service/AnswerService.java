@@ -10,6 +10,9 @@ import com.team.infra_team2.question.entity.Question;
 import com.team.infra_team2.question.repository.QuestionRepository;
 import com.team.infra_team2.solve.entity.Solve;
 import com.team.infra_team2.solve.repository.SolveRepository;
+import com.team.infra_team2.user.entity.User;
+import com.team.infra_team2.user.repository.UserRepository;
+import com.team.infra_team2.user.security.config.auth.PrincipalDetails;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -23,21 +26,25 @@ public class AnswerService {
 	private final SolveRepository solveRepository;
 	private final QuestionRepository questionRepository;
 	private final AnswerRepository answerRepository;
+	private final UserRepository userRepository;
 	
 	@Transactional
 	public AnswerSubmitDetailResponseDTO submitAnswerDetail(
 			AnswerSubmitDetailRequestDTO answerSubmitDetailRequest,
-			Long solveId) {
+			Long solveId,
+			PrincipalDetails principalDetails) {
 		Solve solve = solveRepository.findById(solveId)
 				.orElseThrow(() -> new IllegalArgumentException("Solve not found"));
 		
 		Question question = questionRepository.findById(answerSubmitDetailRequest.getQuestionId())
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 		
+		User user = userRepository.findByUsername(principalDetails.getUsername());
+		
 		Boolean isCorrect = question.getCorrectAnswer().equals(answerSubmitDetailRequest.getSelectedAnswer());
 		
 		Answer answer = Answer.of(answerSubmitDetailRequest.getSelectedAnswer(),
-				isCorrect, solve.getUser(),
+				isCorrect, user,
 				question, solve);
 		
 		answerRepository.save(answer);

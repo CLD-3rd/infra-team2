@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class AnswerSubmitDetailResponseDTO {
 	
-	private Long answer_id;
+	private Long answerId;
 	private String message;
 	
 	public static AnswerSubmitDetailResponseDTO of(Long id, String message) {
