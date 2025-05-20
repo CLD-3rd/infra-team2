@@ -1,8 +1,11 @@
 package com.team.infra_team2.user.controller;
 
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,50 +14,54 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.team.infra_team2.user.constant.UserRoleType;
 import com.team.infra_team2.user.entity.User;
 import com.team.infra_team2.user.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
-
 import com.team.infra_team2.user.request.UserLoginRequestDTO;
 import com.team.infra_team2.user.request.UserSignupRequestDTO;
 import com.team.infra_team2.user.security.config.auth.PrincipalDetails;
 
 
 
-@RequiredArgsConstructor
 @Controller
+@RequestMapping("/api/auth")
 public class SecurityController {
 
-private final UserRepository userRepository;
+	private final UserRepository userRepository;
 // 암호화 모듈 주입
-private final PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
+	private final AuthenticationManager authenticationManager;
 
-@GetMapping({ "", "/" })
-public String indexPage() {
-return "index";
-}
+	public SecurityController(UserRepository userRepository, PasswordEncoder passwordEncoder,
+			AuthenticationManager authenticationManager) {
+		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.authenticationManager = authenticationManager;
+	}
 
-@GetMapping("/user")
-public String userPage() {
-return "user";
-}
+	@GetMapping({ "", "/" })
+	public String indexPage() {
+		return "index";
+	}
 
-@GetMapping("/admin")
-public String adminPage() {
-return "admin";
-}
+	@GetMapping("/user")
+	public String userPage() {
+		return "user";
+	}
 
-@GetMapping("/manager")
-public String manager() {
-return "manager";
-}
+	@GetMapping("/admin")
+	public String adminPage() {
+		return "admin";
+	}
 
-@GetMapping("/login")
-public String loginPage() {
-return "login";
-}
+	@GetMapping("/manager")
+	public String manager() {
+		return "manager";
+	}
+
+	@GetMapping("/login")
+	public String loginPage() {
+		return "login";
+	}
 
 	// model and view
 	@PostMapping("/login")
@@ -95,10 +102,10 @@ return "login";
 	}
 
 //@PreAuthorize("hasRole('ROLE_USER)') or hasRole('ROLE_MANAGER')")
-@Secured(value= {"ROLE_USER", "ROLE_MANAGER"}) //실행되기전에 권한점검
-@GetMapping("/about")
-public String aboutPage() { //매소드에 권한부여
+	@Secured(value = { "ROLE_USER", "ROLE_MANAGER" }) // 실행되기전에 권한점검
+	@GetMapping("/about")
+	public String aboutPage() { // 매소드에 권한부여
 
-return "about";
-}
+		return "about";
+	}
 }
