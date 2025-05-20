@@ -91,7 +91,7 @@
 			        </li>
 			
 			        <!-- 페이지 번호 -->
-			        <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+			        <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
 			            th:classappend="${pageNum == currentPage} ? 'active'">
 			            <a class="page-link" th:href="@{'/api/questions?page=' + ${pageNum}}" th:text="${pageNum}"></a>
 			        </li>
