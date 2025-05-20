@@ -13,7 +13,8 @@ import com.team.infra_team2.choice.entity.Choice;
  */
 @Repository
 public interface ChoiceRepository extends JpaRepository<Choice, Long> {
-	/**
+    
+    /**
      * 특정 문제에 대한 선택지 목록을 선택지 번호 순으로 조회
      * 
      * @param questionId 문제 ID

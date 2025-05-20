@@ -15,20 +15,19 @@ import lombok.Data;
 @Data
 @Entity
 public class User extends BaseEntity {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
-	private Long id;
-	
-	private String username;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long id;
 
-	private String password;
+    private String username;
+    private String password;
 
-	@Enumerated(EnumType.STRING)
-	private UserRoleType userRoleType;
-	
-	protected User() {} 
+    @Enumerated(EnumType.STRING)
+    private UserRoleType userRoleType;
+
+    protected User() {}
 
     private User(String username, String password, UserRoleType userRoleType) {
         this.username = username;

@@ -12,16 +12,15 @@ import com.team.infra_team2.question.entity.Question;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetQuestionListResponseDTO{
-    // TODO: API 명세서에는 'id'로 명시됨. 추후 필드명 변경 검토 필요
-    private Long question_id; // <- API 명세서 - 문제전체 조회 - 응답의 id 필드
-    private String question_text;
+public class GetQuestionListResponseDTO {
+    private Long questionId; // snake_case에서 camelCase로 변경
+    private String questionText; // snake_case에서 camelCase로 변경
     private String author;
-    private String created_at;
-    
+    private String createdAt; // snake_case에서 camelCase로 변경
+
     /**
      * Question 엔티티로부터 DTO를 생성하는 팩토리 메서드
-     * 
+     *
      * @param question 문제 엔티티
      * @return 변환된 DTO 객체
      */
@@ -34,10 +33,10 @@ public class GetQuestionListResponseDTO{
             question.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
     }
-    
+
     /**
      * 원시 값을 통해 DTO를 생성하는 팩토리 메서드
-     * 
+     *
      * @param id 문제 ID
      * @param questionText 문제 내용
      * @param author 작성자
