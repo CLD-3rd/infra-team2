@@ -12,14 +12,14 @@ import lombok.Getter;
 
 @Getter
 public class AnswerDTO {
-	private Long answer_id;
-	private Integer selected_answer;
-	private Boolean is_correct;
+	private Long answerId;
+	private Integer selectedAnswer;
+	private Boolean isCorrect;
 	private UserDTO userDTO;
 	private QuestionDTO questionDTO;
 	private SolveDTO solveDTO;
 	
 	public Answer toEntity(User user, Question question, Solve solve) {
-		return Answer.of(selected_answer, is_correct, user, question, solve);
+		return Answer.of(selectedAnswer, isCorrect, user, question, solve);
 	}
 }

@@ -93,4 +93,28 @@ public class QuestionService {
     public long getTotalQuestionCount() {
         return questionRepository.count();
     }
+    
+    @Transactional(readOnly = true)
+    public int getCurrentIndex(Long currentQuestionId) {
+        // 모든 문제 ID를 오름차순으로 가져옴
+        List<Long> idList = questionRepository.findAllIdsOrderByIdAsc();
+        
+        // 현재 문제 ID의 인덱스를 찾음
+        int index = idList.indexOf(currentQuestionId);
+        
+        // 1-based index로 변환 (1부터 시작하는 인덱스)
+        return index + 1;
+    }
+    
+    public Long getNextQuestionId(Long currentQuestionId) {
+        List<Long> idList = questionRepository.findAllIdsOrderByIdAsc(); // 오름차순
+        int index = idList.indexOf(currentQuestionId);
+
+        if (index == -1 || index + 1 >= idList.size()) {
+            return null; // 삭제되었거나 마지막 문제
+        }
+
+        return idList.get(index + 1);
+    }
+
 }

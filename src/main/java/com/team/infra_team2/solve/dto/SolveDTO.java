@@ -8,8 +8,8 @@ import lombok.Getter;
 
 @Getter
 public class SolveDTO {
-	private Long solve_id;
+	private Long solveId;
 	private String status;
-	private LocalDateTime finishied_at;
+	private LocalDateTime finishiedAt;
 	private UserDTO userDTO;
 }

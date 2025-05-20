@@ -1,7 +1,6 @@
 package com.team.infra_team2.question.controller;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +17,9 @@ import com.team.infra_team2.question.dto.GetQuestionDetailResponseDTO;
 import com.team.infra_team2.question.dto.GetQuestionListResponseDTO;
 import com.team.infra_team2.question.dto.QuestionCreateRequestDTO;
 import com.team.infra_team2.question.service.QuestionService;
+import com.team.infra_team2.solve.constant.SolveStatus;
+import com.team.infra_team2.solve.entity.Solve;
+import com.team.infra_team2.solve.repository.SolveRepository;
 import com.team.infra_team2.user.entity.User;
 import com.team.infra_team2.user.repository.UserRepository;
 import com.team.infra_team2.user.security.config.auth.PrincipalDetails;
@@ -30,6 +32,7 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final UserRepository userRepository;
+    private final SolveRepository solveRepository;
 
     // 문제 목록 페이지 (URL: /api/questions)
     @GetMapping("/api/questions")
@@ -50,13 +53,29 @@ public class QuestionController {
     }
 
     // 문제 상세 페이지
-    @GetMapping("/questions/{questionId}")
+    @GetMapping("/api/questions/{questionId}")
     @PreAuthorize("isAuthenticated()")
     public String getQuestionDetail(
-            @PathVariable(name = "questionId") Long questionId, 
+            @PathVariable(name = "questionId") Long questionId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
             Model model) {
         GetQuestionDetailResponseDTO response = questionService.getQuestionDetail(questionId);
         model.addAttribute("question", response);
+        
+        User user = userRepository.findByUsername(principalDetails.getUsername());
+        Solve currentSolve = solveRepository.findByUserAndStatus(user, SolveStatus.IN_PROGRESS)
+                .stream()
+                .findFirst()
+                .orElse(null);
+        
+        if (currentSolve != null) {
+            model.addAttribute("currentSolveId", currentSolve.getId());
+        }
+        
+        // 진행 상태 정보 추가
+        model.addAttribute("currentIndex", questionService.getCurrentIndex(questionId));
+        model.addAttribute("totalCount", questionService.getTotalQuestionCount());
+        
         return "question_detail";
     }
 
@@ -66,28 +85,6 @@ public class QuestionController {
     public String showCreateForm(Model model) {
         model.addAttribute("question", new QuestionCreateRequestDTO());
         return "question_form";
-    }
-    
-    @GetMapping("/api/questions/get/form")
-    public String questionDetailForm(Model model) {
-		Long questionId = 103L;
-		Long solveId = 1L;
-		String questionText = "What is your favorite color?";
-		
-		List<String> choices = new ArrayList<String>();
-		choices.add("Choice 1");
-		choices.add("Choice 2");
-		choices.add("Choice 3");
-		choices.add("Choice 4");
-		
-	    model.addAttribute("solveId", solveId);
-	    model.addAttribute("questionId", questionId);
-		model.addAttribute("questionText", questionText);
-	    model.addAttribute("choices", choices);
-	    model.addAttribute("currentIndex", 15);
-	    model.addAttribute("totalQuestions", 20);
-
-        return "question_detail";
     }
 
     // 문제 등록 처리 (ADMIN만 접근 가능)

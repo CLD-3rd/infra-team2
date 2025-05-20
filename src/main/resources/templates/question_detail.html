@@ -33,7 +33,6 @@
 </head>
 <body>
 <div class="container">
-
     <!-- 상단 로그아웃 버튼 -->
     <div class="top-bar">
         <a th:href="@{/api/auth/logout}" class="btn btn-primary">Log Out</a>
@@ -46,36 +45,53 @@
 
     <!-- 문제 본문 -->
     <div class="question-box">
-        <form th:action="@{'/api/answers/' + ${solveId}}" method="post">
-            <h5 th:text="${questionText}">문제 내용</h5>
-            <div class="answer-list mt-3" th:each="choice, iterStat : ${choices}">
+        <form th:action="@{'/api/answers/' + ${currentSolveId}}" method="post" id="answerForm">
+            <h5 th:text="${question.questionText}">문제 내용 출력</h5>
+            <div class="answer-list mt-3" th:each="choice : ${question.choiceList}">
                 <div class="form-check">
                     <input class="form-check-input" type="radio"
-                           th:id="'choice' + ${iterStat.index}"
+                           th:id="'choice' + ${choice.choiceNumber}"
                            name="selectedAnswer"
-                           th:value="${iterStat.index + 1}"
+                           th:value="${choice.choiceNumber}"
                            required>
                     <label class="form-check-label"
-                           th:for="'choice' + ${iterStat.index}"
-                           th:text="${choice}">선택지 출력</label>
+                           th:for="'choice' + ${choice.choiceNumber}"
+                           th:text="${choice.choiceText}">선택지 출력</label>
                 </div>
             </div>
 
-            <!-- 숨겨진 questionId 필드 -->
-            <input type="hidden" name="questionId" th:value="${questionId}" />
-
+            <!-- 숨겨진 필드들 -->
+            <input type="hidden" name="questionId" th:value="${question.questionId}" />
+            
             <!-- 버튼들 -->
             <div class="btn-group-wrapper">
-                <button type="submit" class="btn btn-primary">다음</button>
-				<!-- TODO: 마지막 문제에서만 활성화 -->
-                <a th:href="@{/solve/finish}" class="btn btn-outline-primary">문제 풀이 종료</a>
-                <a th:href="@{'/questions/edit/' + ${question.questionId}}" class="btn btn-primary">편집</a>
-                <a th:href="@{'/questions/delete/' + ${question.questionId}}" class="btn btn-danger">삭제</a>
-
+                <!-- 다음 문제로 이동 -->
+                <button type="submit"
+                        class="btn btn-primary">
+                    다음
+                </button>
+            
+                <!-- 현재 문제 제출 + solve 종료 -->
+                <button type="button"
+                        class="btn btn-outline-primary"
+                        onclick="submitAndFinish()">
+                    문제 풀이 종료
+                </button>
+            
+                <!-- 관리자 전용: 편집 / 삭제 -->
+                <a th:href="@{'/api/questions/edit/' + ${question.questionId}}" class="btn btn-primary">편집</a>
+                <a th:href="@{'/api/questions/delete/' + ${question.questionId}}" class="btn btn-danger">삭제</a>
             </div>
         </form>
     </div>
 
+    <script th:inline="javascript">
+        function submitAndFinish() {
+            var form = document.getElementById('answerForm');
+            form.action = /*[[@{'/api/answers/' + ${currentSolveId} + '/finish'}]]*/ '';
+            form.submit();
+        }
+    </script>
 </div>
 </body>
 </html>

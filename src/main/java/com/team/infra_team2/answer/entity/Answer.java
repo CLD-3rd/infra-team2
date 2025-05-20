@@ -51,8 +51,8 @@ public class Answer extends BaseEntity {
 		this.solve = solve;
 	}
 	
-	public static Answer of(Integer selected_answer, Boolean is_correct, User user, Question question,
+	public static Answer of(Integer selectedAnswer, Boolean isCorrect, User user, Question question,
 			Solve solve) {
-		return new Answer(selected_answer, is_correct, user, question, solve);
+		return new Answer(selectedAnswer, isCorrect, user, question, solve);
 	}
 }

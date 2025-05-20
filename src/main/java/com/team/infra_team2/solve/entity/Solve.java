@@ -19,11 +19,13 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @AllArgsConstructor
 @Entity
+@Setter
 public class Solve extends BaseEntity {
 	
 	@Id
@@ -33,11 +35,22 @@ public class Solve extends BaseEntity {
 	
 	@Enumerated(EnumType.STRING)
 	private SolveStatus status;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 	
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
+
 	@Column(name = "finished_at")
 	private LocalDateTime finishedAt;
+	
+	public static Solve create(User user) {
+		Solve solve = new Solve(); 
+		solve.setUser(user);
+		solve.setStatus(SolveStatus.IN_PROGRESS);
+		solve.setCreatedAt(LocalDateTime.now());
+		return solve;
+    }
 }
