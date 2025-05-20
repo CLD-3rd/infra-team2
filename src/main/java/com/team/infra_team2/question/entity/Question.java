@@ -18,8 +18,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@Entity
 @NoArgsConstructor
+@Entity
 public class Question extends BaseEntity {
 	
 	@Id
