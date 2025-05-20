@@ -1,0 +1,45 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      SERVER_PORT: ${SERVER_PORT}
+      SERVER_ADDRESS: ${SERVER_ADDRESS}
+      LOG_FILE_NAME: ${LOG_FILE_NAME}
+      LOG_LEVEL_ROOT: ${LOG_LEVEL_ROOT}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - backend
+    command: ["java", "-jar", "infra-team2-0.0.1-SNAPSHOT.jar"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # macOS/Windows IDE 연동
+    volumes:
+      - ./app-logs:/logs
+
+  db:
+    image: mysql:8.0
+    restart: always
+    container_name: mysql-container
+    ports:
+      - "3307:3307"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./mysql/app.sql:/docker-entrypoint-initdb.d/02-app.sql
+      - ./mysql/mysql_custom.cnf:/etc/mysql/conf.d/mysql_custom.cnf
+      - ./db-logs:/logs
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  mysql-data:

@@ -1,0 +1,8 @@
+USE mysql;
+
+CREATE USER 'app'@'%' IDENTIFIED WITH mysql_native_password BY 'app';
+FLUSH PRIVILEGES;
+
+CREATE DATABASE IF NOT EXISTS app;
+GRANT ALL PRIVILEGES ON app.* TO 'app'@'%';
+FLUSH PRIVILEGES;
