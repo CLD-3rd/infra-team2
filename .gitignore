@@ -27,3 +27,8 @@ replay_pid*
 # General
 .DS_Store
 
+# target
+/target/
+
+# Eclipse settings
+.settings/
