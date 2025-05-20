@@ -9,7 +9,7 @@ public class UserDTO {
 	private String password;
 	private UserRoleType userRoleType;
 
-	private UserDTO(String username, String password, UserRoleType userRoleType) {
+	public UserDTO(String username, String password, UserRoleType userRoleType) {
 		this.username = username;
 		this.password = password;
 		this.userRoleType = userRoleType;

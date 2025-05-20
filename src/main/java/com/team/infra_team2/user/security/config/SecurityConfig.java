@@ -29,6 +29,8 @@ public class SecurityConfig {
 
 
 		http.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/", "/api/auth/").permitAll()
+				//.requestMatchers("/", "/api/auth/**").permitAll()
 				.requestMatchers("/api/auth/user/**").hasAnyRole("USER", "MANAGER", "ADMIN") // 유저, 매니져, 어드민 접근가능한 user
 				.requestMatchers("/api/auth/manager/**").hasAnyRole("MANAGER", "ADMIN")// admin,매니져만 접근가능한
 				.requestMatchers("/api/auth/admin/**").hasAnyRole("ADMIN") // admin만 접근가능한 페이지
@@ -43,40 +45,11 @@ public class SecurityConfig {
 														// 위치를 설정해주는 부분임
 //.successHandler(authenticationSuccessHandler()) //성공 핸들러 등록
 //.failureHandler(authenticationFailureHandler()) //실패 핸들러 등록
-				.defaultSuccessUrl("/")); // 로그인 성공시 이동
+				.defaultSuccessUrl("/api/questions?page=1&size=10", true)); // 로그인 성공시 이동
 
 		return http.build();
 
 	}
-	/*
-	 * TEST 중...
-	 * 
-	 * @Bean public AuthenticationSuccessHandler authenticationSuccessHandler() {
-	 * return (request, response, authentication) -> { PrincipalDetails principal =
-	 * (PrincipalDetails) authentication.getPrincipal();
-	 * 
-	 * // 응답 객체 생성 UserLoginResponseDTO responseDTO = new UserLoginResponseDTO();
-	 * responseDTO.setUsername(principal.getUsername());
-	 * responseDTO.setMessage("로그인 성공"); // 필요한 추가 정보도 세팅 가능
-	 * 
-	 * response.setStatus(HttpServletResponse.SC_OK);
-	 * response.setContentType("application/json;charset=UTF-8");
-	 * 
-	 * // JSON 응답 전송 ObjectMapper mapper = new ObjectMapper();
-	 * response.getWriter().write(mapper.writeValueAsString(responseDTO)); }; }
-	 * 
-	 * 
-	 * @Bean public AuthenticationFailureHandler authenticationFailureHandler() {
-	 * return (request, response, exception) -> {
-	 * response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-	 * response.setContentType("application/json;charset=UTF-8");
-	 * 
-	 * Map<String, String> error = new HashMap<>(); error.put("message", "로그인 실패: "
-	 * + exception.getMessage());
-	 * 
-	 * ObjectMapper mapper = new ObjectMapper();
-	 * response.getWriter().write(mapper.writeValueAsString(error)); }; }
-	 */
 
 	@Bean
 	public AccessDeniedHandler customAccessDeniedHandler() {
