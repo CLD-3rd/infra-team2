@@ -22,24 +22,21 @@ public class User extends BaseEntity {
 	private Long id;
 	
 	private String username;
-	
+
 	private String password;
 
 	@Enumerated(EnumType.STRING)
 	private UserRoleType userRoleType;
 	
+	protected User() {} 
 
-	protected User() {
-	}
+    private User(String username, String password, UserRoleType userRoleType) {
+        this.username = username;
+        this.password = password;
+        this.userRoleType = userRoleType;
+    }
 
-	private User(String username, String password, UserRoleType userRoleType) {
-		this.username = username;
-		this.password = password;
-		this.userRoleType = userRoleType;
-	}
-	public static User of(String username, String password, UserRoleType userRoleType) {
-		return new User(username, password, userRoleType);
-	}
-
-	
+    public static User of(String username, String password, UserRoleType userRoleType) {
+        return new User(username, password, userRoleType);
+    }
 }

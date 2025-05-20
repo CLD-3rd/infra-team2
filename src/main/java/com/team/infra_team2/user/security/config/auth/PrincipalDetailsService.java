@@ -13,19 +13,19 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class PrincipalDetailsService implements UserDetailsService {
+public class PrincipalDetailsService implements UserDetailsService { 
 
-	private final UserRepository userRepository;
+private final UserRepository userRepository;
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+@Override
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		User user = userRepository.findByUsername(username);
+User user= userRepository.findByUsername(username);
 
-		if (user != null) {
-			return new PrincipalDetails(user);
-		}
+if (user!= null) {
+return new PrincipalDetails(user); 
+}
 
-		throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username);
-	}
+return null;
+}
 }
