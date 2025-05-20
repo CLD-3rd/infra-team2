@@ -25,7 +25,7 @@ public class QuestionController {
     private final QuestionService questionService;
     private final UserRepository userRepository;
     
-    @GetMapping("/api/create")
+    @GetMapping("/api/questions/form")
     @PreAuthorize("hasRole('ADMIN')")
     public String showCreateForm(Model model) {
         model.addAttribute("question", new QuestionCreateRequestDTO());
