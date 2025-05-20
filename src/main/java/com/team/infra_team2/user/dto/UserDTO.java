@@ -9,11 +9,12 @@ public class UserDTO {
     private String password;
     private UserRoleType userRoleType;
 
-     private UserDTO(String username, String password, UserRoleType userRoleType) {
-        this.username = username;
-        this.password = password;
-        this.userRoleType = userRoleType;
-    }
+	public UserDTO(String username, String password, UserRoleType userRoleType) {
+		this.username = username;
+		this.password = password;
+		this.userRoleType = userRoleType;
+	}
+
 
     // 회원가입 시 사용
     public static UserDTO of(String username, String password) {

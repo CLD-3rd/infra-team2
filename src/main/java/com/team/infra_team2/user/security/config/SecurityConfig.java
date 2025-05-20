@@ -32,17 +32,25 @@ http
 .cors(cors -> cors.disable());
 
 
-http
-.authorizeHttpRequests(authorize ->
-authorize
-// .anyRequest().permitAll(); //모든 사람에게 접근가능 //여기서 기재 시 ROLE_부분은 빼준다 프리픽스 제거
-.requestMatchers("/user/**").hasAnyRole("USER", "MANAGER", "ADMIN") //유저, 매니져, 어드민 접근가능한 user 페이지. //만약 권한없다면 USER페이지 대신 로그인페이지로 자동이동시킴
-.requestMatchers("/manager/**").hasAnyRole("MANAGER", "ADMIN")//admin,매니져만 접근가능한
-.requestMatchers("/admin/**").hasAnyRole("ADMIN") //admin만 접근가능한 페이지
-.anyRequest().permitAll());
 
-//인가에 매소드를 직접지정하는 방법 -> controller 에서 /about
+		http.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/", "/api/auth/").permitAll()
+				//.requestMatchers("/", "/api/auth/**").permitAll()
+				.requestMatchers("/api/auth/user/**").hasAnyRole("USER", "MANAGER", "ADMIN") // 유저, 매니져, 어드민 접근가능한 user
+				.requestMatchers("/api/auth/manager/**").hasAnyRole("MANAGER", "ADMIN")// admin,매니져만 접근가능한
+				.requestMatchers("/api/auth/admin/**").hasAnyRole("ADMIN") // admin만 접근가능한 페이지
+				.anyRequest().permitAll())
+				.exceptionHandling(exception -> exception.accessDeniedHandler(customAccessDeniedHandler()) // 403 처리
+				);
 
+
+		http.formLogin(form -> form.loginPage("/api/auth/login") // "/login"는 컨트롤러의 맵핑주소. 이제 커스터마이징한 로그인페이지 접근가능 시큐리티가
+																	// 제공하는 로그인페이지말고.
+				.loginProcessingUrl("/api/auth/login") // 프론트 포스트요청 URI로부터 정보를 가로채와서 유저서비스쪽에서 처리해야함...이 Url설정으로부터. 가로채는
+														// 위치를 설정해주는 부분임
+//.successHandler(authenticationSuccessHandler()) //성공 핸들러 등록
+//.failureHandler(authenticationFailureHandler()) //실패 핸들러 등록
+				.defaultSuccessUrl("/api/questions?page=1&size=10", true)); // 로그인 성공시 이동
 
 
 http
@@ -51,6 +59,9 @@ form
 .loginPage("/login")//"/login"는 컨트롤러의 맵핑주소. 이제 커스터마이징한 로그인페이지 접근가능 시큐리티가 제공하는 로그인페이지말고.
 .loginProcessingUrl("/login") //프론트 포스트요청 URI로부터 정보를 가로채와서 유저서비스쪽에서 처리해야함...이 Url설정으로부터. 가로채는 위치를 설정해주는 부분임
 .defaultSuccessUrl("/"));  //로그인 성공시 어디로 이동할건지?-> 여기선 / 로 기본 인덱스로 가도록 설정
+
+
+	}
 
 
 
