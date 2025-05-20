@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 @Entity
 public class User extends BaseEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -27,7 +27,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRoleType userRoleType;
 
-    protected User() {}
+    protected User() {
+        // JPA 기본 생성자
+    }
 
     private User(String username, String password, UserRoleType userRoleType) {
         this.username = username;
