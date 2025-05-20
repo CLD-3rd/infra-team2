@@ -79,8 +79,10 @@
                 </button>
             
                 <!-- 관리자 전용: 편집 / 삭제 -->
-                <a th:href="@{'/api/questions/edit/' + ${question.questionId}}" class="btn btn-primary">편집</a>
-                <a th:href="@{'/api/questions/delete/' + ${question.questionId}}" class="btn btn-danger">삭제</a>
+				<div th:if="${#authentication.principal.role} == 'ROLE_ADMIN'">
+				        <a th:href="@{'/api/questions/edit/' + ${question.questionId}}" class="btn btn-primary">편집</a>
+				        <a th:href="@{'/api/questions/delete/' + ${question.questionId}}" class="btn btn-danger">삭제</a>
+				    </div>
             </div>
         </form>
     </div>

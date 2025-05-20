@@ -101,4 +101,24 @@ public class QuestionController {
         questionService.createQuestion(requestDTO, user);
         return "redirect:/api/questions";
     }
+    
+ // 문제 수정 폼
+    @GetMapping("/api/questions/edit/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
+        GetQuestionDetailResponseDTO dto = questionService.getQuestionDetail(id);
+        model.addAttribute("question", dto);
+        return "question_edit_form"; // 이 템플릿으로 이동
+    }
+
+    // 문제 수정 제출 처리
+    @PostMapping("/api/questions/{id}/edit")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String editQuestion(
+    		@PathVariable("id") Long id,
+            @ModelAttribute QuestionCreateRequestDTO requestDTO) {
+        questionService.updateQuestion(id, requestDTO);
+        return "redirect:/api/questions/" + id; // 수정 완료 후 상세페이지로 이동
+    }
+
 }

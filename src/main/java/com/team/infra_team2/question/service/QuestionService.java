@@ -20,6 +20,7 @@ import com.team.infra_team2.question.entity.Question;
 import com.team.infra_team2.question.repository.QuestionRepository;
 import com.team.infra_team2.user.entity.User;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -116,5 +117,17 @@ public class QuestionService {
 
         return idList.get(index + 1);
     }
+    
+    @Transactional
+    public void updateQuestion(Long questionId, QuestionCreateRequestDTO dto) {
+        Question question = questionRepository.findById(questionId)
+            .orElseThrow(() -> new EntityNotFoundException("문제를 찾을 수 없습니다."));
+
+        question.setQuestionText(dto.getQuestionText());
+        question.setCorrectAnswer(dto.getCorrectAnswer());
+
+        // 🔥 선택지 수정은 나중에 구현해도 됨
+    }
+
 
 }
