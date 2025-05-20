@@ -43,10 +43,14 @@ public class SecurityConfig {
 																	// 제공하는 로그인페이지말고.
 				.loginProcessingUrl("/api/auth/login") // 프론트 포스트요청 URI로부터 정보를 가로채와서 유저서비스쪽에서 처리해야함...이 Url설정으로부터. 가로채는
 														// 위치를 설정해주는 부분임
-//.successHandler(authenticationSuccessHandler()) //성공 핸들러 등록
-//.failureHandler(authenticationFailureHandler()) //실패 핸들러 등록
 				.defaultSuccessUrl("/api/questions?page=1&size=10", true)); // 로그인 성공시 이동
 
+		http.logout(logout -> logout
+			    .logoutUrl("/api/auth/logout")           // 로그아웃 요청을 보낼 URL (프론트에서 이 경로로 POST 요청)
+			    .logoutSuccessUrl("/api/auth/login")     // 로그아웃 성공 후 이동할 URL
+			    .invalidateHttpSession(true)             // 세션 무효화
+			    .deleteCookies("JSESSIONID")             // 쿠키 삭제
+			);
 		return http.build();
 
 	}
