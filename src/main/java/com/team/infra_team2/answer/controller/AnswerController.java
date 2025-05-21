@@ -31,7 +31,7 @@ public class AnswerController {
     private final QuestionService questionService;
     private final SolveRepository solveRepository;  // 추가
 
-    @PostMapping("/{solveId}")
+    @PostMapping
     @PreAuthorize("isAuthenticated()")
     public String submitAnswerDetail(
             @ModelAttribute AnswerSubmitDetailRequestDTO answerSubmitDetailRequest,
@@ -60,7 +60,8 @@ public class AnswerController {
     }
 
     // 추가: 답안 제출 후 풀이 종료
-    @PostMapping("/{solveId}/finish")
+    //endpoint에서 /{solveId}삭제
+    @PostMapping("/finish")
     @PreAuthorize("isAuthenticated()")
     @Transactional
     public String finishAnswerAndSolve(

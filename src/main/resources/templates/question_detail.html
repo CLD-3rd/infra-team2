@@ -69,7 +69,8 @@
 
     <!-- 문제 내용 -->
     <div class="question-box">
-        <form th:action="@{'/api/answers/' + ${currentSolveId}}" method="post" id="answerForm">
+		<!-- 이부분 currentSolveId삭제 -->
+        <form th:action="@{'/api/answers'}" method="post" id="answerForm">
             <h5 th:text="${question.questionText}">문제 내용 출력</h5>
 
             <div class="answer-list mt-3" th:each="choice : ${question.choiceList}">
@@ -116,7 +117,8 @@
 <script th:inline="javascript">
     function submitAndFinish() {
         var form = document.getElementById('answerForm');
-        form.action = /*[[@{'/api/answers/' + ${currentSolveId} + '/finish'}]]*/ '';
+		// 이부분 currentId 삭
+        form.action = /*[[@{'/api/answers/' + 'finish'}]]*/ '';
         form.submit();
     }
 </script>
