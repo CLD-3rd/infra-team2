@@ -2,10 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>문제 풀이</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
-            background-color: #f6f9ff;
+            background-color: #f1f4fa;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         .header-bar {
@@ -20,99 +24,189 @@
             font-weight: bold;
         }
 
+        .subtitle {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .btn-logout {
+            color: white;
+            background-color: #0d6efd;
+            border: none;
+            padding: 6px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .btn-logout:hover {
+            background-color: #0b5ed7; /* 더 진한 파랑 */
+			color: white;
+        }
+
         .progress-info {
             text-align: center;
-            margin-bottom: 20px;
-            font-weight: bold;
+            margin: 30px 0 20px 0;
+            font-weight: 500;
+            font-size: 16px;
         }
 
         .question-box {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background: white;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 6px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.05);
         }
 
-        .answer-list .form-check {
+        .question-text {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .answer-list {
+            font-size: 16px;
+            margin-top: 20px;
+            padding-left: 10px;
+        }
+
+        .answer-list div {
             margin: 10px 0;
         }
 
-        .btn-group-wrapper {
+        .btn-container {
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin-top: 30px;
-            flex-wrap: wrap;
+            margin-top: 50px;
         }
 
-        .inline-form {
-            display: inline-block;
+		.btn-blue, .btn-outline-blue, .btn-gray, .btn-red {
+		    width: 160px;
+		    height: 48px;
+		    font-weight: 500;
+		    font-size: 16px;
+		    border-radius: 6px;
+		    border: none;
+		
+		    display: flex;
+		    align-items: center;         /* 세로 가운데 */
+		    justify-content: center;     /* 가로 가운데 */
+		    white-space: nowrap;         /* 줄바꿈 방지 */
+		}
+
+
+        .btn-blue {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
+        .btn-blue:hover {
+        background-color: #0b5ed7;
+        }
+
+        .btn-outline-blue {
+            background-color: white;
+            color: #0d6efd;
+            border: 2px solid #0d6efd;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .btn-outline-blue:hover {
+             background-color: #e9f0ff;
+        }
+
+		.btn-gray {
+		    background-color: #6c757d;
+		    color: white;
+		    border: none;
+			white-space: nowrap;
+		}
+        .btn-gray:hover {
+            background-color: #5c636a;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .btn-red {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .btn-red:hover {
+            background-color: #bb2d3b;
+        }
+		
     </style>
 </head>
 <body>
-<div class="container-fluid">
 
-    <!-- 상단 바: 문제은행 타이틀 + 로그아웃 -->
-    <div class="header-bar">
-        <div class="title">문제은행</div>
-        <form th:action="@{/api/auth/logout}" method="post" style="display:inline;">
-            <button type="submit" class="btn btn-primary">Log Out</button>
-        </form>
+<!-- 상단 바 -->
+<div class="header-bar">
+    <div>
+        <div class="title">	🗳문제은행</div>
+        <div class="subtitle">문제은행</div>
     </div>
-
-    <!-- 진행 상태 -->
-    <div class="progress-info">
-        <p th:text="${currentIndex} + ' / ' + ${totalCount} + ' 진행 중'">진행 중</p>
-    </div>
-
-    <!-- 문제 내용 -->
-    <div class="question-box">
-        <form th:action="@{'/api/answers/' + ${currentSolveId}}" method="post" id="answerForm">
-            <h5 th:text="${question.questionText}">문제 내용 출력</h5>
-
-            <div class="answer-list mt-3" th:each="choice : ${question.choiceList}">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio"
-                           th:id="'choice' + ${choice.choiceNumber}"
-                           name="selectedAnswer"
-                           th:value="${choice.choiceNumber}"
-                           required>
-                    <label class="form-check-label"
-                           th:for="'choice' + ${choice.choiceNumber}"
-                           th:text="${choice.choiceText}">선택지 출력</label>
-                </div>
-            </div>
-
-            <input type="hidden" name="questionId" th:value="${question.questionId}" />
-        </form>
-
-        <!-- 버튼 그룹: 다음 / 종료 / 편집 / 삭제 -->
-        <div class="btn-group-wrapper">
-
-            <!-- 다음 (정답 제출용 form과 연결됨) -->
-            <button type="submit" form="answerForm" class="btn btn-primary">다음</button>
-
-            <!-- 종료 (JS로 action 변경 후 submit) -->
-            <form class="inline-form" onsubmit="submitAndFinish(); return false;">
-                <button type="submit" class="btn btn-outline-primary">문제 풀이 종료</button>
-            </form>
-
-            <!-- 관리자 전용: 편집/삭제 -->
-            <div th:if="${#authentication.principal.role} == 'ROLE_ADMIN'" style="display: flex; gap: 20px; flex-wrap: wrap;">
-                <a th:href="@{'/api/questions/edit/' + ${question.questionId}}" class="btn btn-secondary">편집</a>
-
-                <form th:action="@{'/api/questions/delete/' + ${question.questionId}}" method="post" class="inline-form">
-                    <button type="submit" class="btn btn-danger">삭제</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
+    <form th:action="@{/api/auth/logout}" method="post">
+        <button type="submit" class="btn-logout">Log Out</button>
+    </form>
 </div>
 
-<!-- 문제 풀이 종료용 JavaScript -->
+<!-- 진행 정보 -->
+<div class="progress-info">
+    <span th:text="${currentIndex} + ' / ' + ${totalCount} + ' 문제 .. 진행 중'">1 / 20 문제 .. 진행 중</span>
+</div>
+
+<!-- 문제 박스 -->
+<div class="question-box">
+    <form th:action="@{'/api/answers/' + ${currentSolveId}}" method="post" id="answerForm">
+        <!-- 문제 텍스트 -->
+        <div class="question-text" th:text="${question.questionText}">
+            럼바우(Rumbaugh)의 객체지향 분석 기법 중 자료 흐름도(DFD)를 주로 이용하는 것은?
+        </div>
+
+        <!-- 선택지 목록 -->
+        <div class="answer-list">
+            <div class="form-check" th:each="choice, stat : ${question.choiceList}">
+                <input class="form-check-input"
+                       type="radio"
+                       name="selectedAnswer"
+                       th:id="'choice' + ${choice.choiceNumber}"
+                       th:value="${choice.choiceNumber}" required>
+                <label class="form-check-label" th:for="'choice' + ${choice.choiceNumber}">
+                    <span th:text="${stat.count} + '. ' + ${choice.choiceText}">1. 기능 모델링</span>
+                </label>
+            </div>
+        </div>
+
+        <input type="hidden" name="questionId" th:value="${question.questionId}" />
+    </form>
+
+    <!-- 버튼 -->
+    <div class="btn-container">
+        <!-- 다음 -->
+        <button type="submit" form="answerForm" class="btn-blue">다음</button>
+
+        <!-- 문제 풀이 종료 -->
+        <form onsubmit="submitAndFinish(); return false;">
+            <button type="submit" class="btn-outline-blue">문제 풀이 종료</button>
+        </form>
+
+        <!-- 관리자 전용 -->
+        <div th:if="${#authentication.principal.role == 'ROLE_ADMIN'}" style="display: flex; gap: 20px;">
+            <a th:href="@{'/api/questions/edit/' + ${question.questionId}}" class="btn-gray">편집</a>
+            <form th:action="@{'/api/questions/delete/' + ${question.questionId}}" method="post">
+                <button type="submit" class="btn-red">삭제</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 스크립트 -->
 <script th:inline="javascript">
     function submitAndFinish() {
         var form = document.getElementById('answerForm');
@@ -120,5 +214,6 @@
         form.submit();
     }
 </script>
+
 </body>
 </html>
