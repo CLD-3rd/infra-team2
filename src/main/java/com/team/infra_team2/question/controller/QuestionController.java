@@ -76,13 +76,13 @@ public class QuestionController {
         GetQuestionDetailResponseDTO response = questionService.getQuestionDetail(questionId);
         model.addAttribute("question", response);
         
+        
         // 주석 삭제 
-//        Long solveId = (Long) session.getAttribute("solveId");
-//
-//        
-//        User user = userRepository.findByUsername(principalDetails.getUsername());
+        Long solveId = (Long) session.getAttribute("solveId");
+        System.out.println("questionId: " + questionId);
         
         // 진행 상태 정보 추가
+        model.addAttribute("currentSolveId", solveId);
         model.addAttribute("currentIndex", questionService.getCurrentIndex(questionId));
         model.addAttribute("totalCount", questionService.getTotalQuestionCount());
         

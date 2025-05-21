@@ -44,7 +44,8 @@ public class AnswerController {
 
         // 다음 문제 ID 계산 (오름차순 리스트 기반)
         Long nextQuestionId = questionService.getNextQuestionId(answerSubmitDetailRequest.getQuestionId());
-
+        System.out.println("nextQuestionId: " + nextQuestionId);
+        
         // 문제 삭제되었거나 마지막 문제면 → 종료 페이지로 리다이렉트
         if (nextQuestionId == null) {
             Solve solve = solveRepository.findById(solveId)
