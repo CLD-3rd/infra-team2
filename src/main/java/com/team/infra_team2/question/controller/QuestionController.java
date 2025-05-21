@@ -40,10 +40,24 @@ public class QuestionController {
         List<GetQuestionListResponseDTO> responseList = questionService.getQuestionList(page, size);
         long totalCount = questionService.getTotalQuestionCount(); // 이건 서비스에 구현되어 있어야 함
         int totalPages = (int) Math.ceil((double) totalCount / size);
+        
+        // 중앙정렬 + 10개 페이지씩 표시
+        int displayPageCount = 10;
+        int half = displayPageCount / 2;
 
+        int startPage = Math.max(1, page - half);
+        int endPage = startPage + displayPageCount - 1;
+
+        if (endPage > totalPages) {
+            endPage = totalPages;
+            startPage = Math.max(1, endPage - displayPageCount + 1);
+        }
+        
         model.addAttribute("questions", responseList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         return "question_list";
     }
 

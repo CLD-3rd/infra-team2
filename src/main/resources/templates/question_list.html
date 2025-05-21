@@ -84,14 +84,23 @@
 
             <!-- 페이지네이션 -->
             <nav>
-                <ul class="pagination">
-                    <li class="page-item"><a class="page-link" th:href="@{'/questions?page=' + (${currentPage} - 1)}">Previous</a></li>
-                    <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
-                        th:classappend="${pageNum == currentPage} ? 'active'">
-                        <a class="page-link" th:href="@{'/questions?page=' + ${pageNum}}" th:text="${pageNum}"></a>
-                    </li>
-                    <li class="page-item"><a class="page-link" th:href="@{'/questions?page=' + (${currentPage} + 1)}">Next</a></li>
-                </ul>
+				<ul class="pagination">
+			        <!-- 이전 페이지 버튼 -->
+			        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+						<a class="page-link" th:href="@{/api/questions(page=${currentPage - 1})}">Previous</a>
+			        </li>
+			
+			        <!-- 페이지 번호 -->
+			        <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
+			            th:classappend="${pageNum == currentPage} ? 'active'">
+			            <a class="page-link" th:href="@{'/api/questions?page=' + ${pageNum}}" th:text="${pageNum}"></a>
+			        </li>
+			
+			        <!-- 다음 페이지 버튼 -->
+			        <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+						<a class="page-link" th:href="@{/api/questions(page=${currentPage + 1})}">Next</a>
+			        </li>
+			    </ul>
             </nav>
         </div>
     </div>
