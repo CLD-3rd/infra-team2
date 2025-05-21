@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>문제 입력</title>
+    <title>문제 수정</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -25,9 +25,6 @@
             border-radius: 12px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        .form-label {
-            font-weight: bold;
-        }
         .btn-group-wrapper {
             display: flex;
             justify-content: center;
@@ -40,35 +37,43 @@
     <div class="container-fluid">
         <!-- 상단 바 -->
         <div class="header-bar">
-            <div class="title">문제은행</div>
+            <div class="title">문제 수정</div>
 			<form th:action="@{/api/auth/logout}" method="post" style="display:inline;">
 				<button type="submit" class="btn btn-primary">Log Out</button>
 			</form>
         </div>
 
-        <!-- 문제 등록 폼 -->
+        <!-- 문제 수정 폼 -->
         <div class="form-section">
-            <form th:action="@{/api/questions}" method="post">
+            <form th:action="@{'/api/questions/' + ${question.questionId} + '/edit'}" method="post">
                 <!-- 문제 입력 -->
                 <div class="mb-4">
-                    <label for="questionText" class="form-label">문제를 입력해주세요</label>
-                    <input type="text" class="form-control" id="questionText" name="questionText" required>
+                    <label for="questionText" class="form-label">문제 내용</label>
+                    <input type="text" class="form-control" id="questionText" name="questionText"
+                           th:value="${question.questionText}" required>
                 </div>
 
-                <!-- 선택지 입력 (4개) -->
+                <!-- 선택지 입력 -->
                 <div th:each="i : ${#numbers.sequence(1,4)}" class="mb-3">
                     <label th:for="'choice' + ${i}" th:text="'선택지 ' + ${i}" class="form-label"></label>
-                    <input type="text" th:id="'choice' + ${i}" th:name="'choicesCreate[' + ${i-1} + '].choiceText'" class="form-control" required>
+                    <input type="text"
+                           th:id="'choice' + ${i}"
+                           th:name="'choicesCreate[' + ${i-1} + '].choiceText'"
+                           th:value="${question.choiceList[i-1].choiceText}"
+                           class="form-control" required>
+
                     <div class="form-check mt-1">
-                        <input class="form-check-input" type="radio" name="correctAnswer" th:value="${i}" required>
+                        <input class="form-check-input" type="radio" name="correctAnswer"
+                               th:value="${i}"
+                               th:checked="${question.correctAnswer == i}" />
                         <label class="form-check-label">정답으로 지정</label>
                     </div>
                 </div>
 
                 <!-- 버튼 -->
                 <div class="btn-group-wrapper">
-                    <a th:href="@{/api/questions}" class="btn btn-outline-primary px-5">취소</a>
-                    <button type="submit" class="btn btn-primary px-5">저장</button>
+                    <a th:href="@{'/api/questions/' + ${question.questionId}}" class="btn btn-outline-primary px-5">취소</a>
+                    <button type="submit" class="btn btn-primary px-5">수정</button>
                 </div>
             </form>
         </div>

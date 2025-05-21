@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.team.infra_team2.answer.repository.AnswerRepository;
 import com.team.infra_team2.choice.entity.Choice;
 import com.team.infra_team2.choice.repository.ChoiceRepository;
 import com.team.infra_team2.question.dto.GetQuestionDetailResponseDTO;
@@ -20,6 +21,7 @@ import com.team.infra_team2.question.entity.Question;
 import com.team.infra_team2.question.repository.QuestionRepository;
 import com.team.infra_team2.user.entity.User;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
+    private final AnswerRepository answerRepository;
      
     /**
      * 문제 생성
@@ -45,7 +48,7 @@ public class QuestionService {
         for(int i = 0; i < requestDTO.getChoicesCreate().size(); i++) {
             QuestionCreateRequestDTO.ChoiceCreateRequestDTO choiceDTO = requestDTO.getChoicesCreate().get(i);
             String choice_text = choiceDTO.getChoiceText();
-            int choice_number = choiceDTO.getChoiceNumber();
+            int choice_number = i + 1;
             
             Choice choice = new Choice();
             choice.setChoiceText(choice_text);
@@ -93,4 +96,77 @@ public class QuestionService {
     public long getTotalQuestionCount() {
         return questionRepository.count();
     }
+    
+    @Transactional(readOnly = true)
+    public int getCurrentIndex(Long currentQuestionId) {
+        // 모든 문제 ID를 오름차순으로 가져옴
+        List<Long> idList = questionRepository.findAllIdsOrderByIdAsc();
+        
+        // 현재 문제 ID의 인덱스를 찾음
+        int index = idList.indexOf(currentQuestionId);
+        
+        // 1-based index로 변환 (1부터 시작하는 인덱스)
+        return index + 1;
+    }
+    
+    public Long getNextQuestionId(Long currentQuestionId) {
+        List<Long> idList = questionRepository.findAllIdsOrderByIdAsc(); // 오름차순
+        int index = idList.indexOf(currentQuestionId);
+
+        if (index == -1 || index + 1 >= idList.size()) {
+            return null; // 삭제되었거나 마지막 문제
+        }
+
+        return idList.get(index + 1);
+    }
+    
+    @Transactional
+    public void updateQuestion(Long questionId, QuestionCreateRequestDTO dto) {
+        Question question = questionRepository.findById(questionId)
+            .orElseThrow(() -> new EntityNotFoundException("문제를 찾을 수 없습니다."));
+
+        question.setQuestionText(dto.getQuestionText());
+        question.setCorrectAnswer(dto.getCorrectAnswer());
+
+        // 기존 선택지 삭제
+        choiceRepository.deleteAllByQuestion(question); // question 엔티티 통째로 넘겨줌
+
+
+     // 새 선택지 등록 (choiceNumber는 서버에서 직접 부여)
+        List<Choice> newChoices = new ArrayList<>();
+        for (int i = 0; i < dto.getChoicesCreate().size(); i++) {
+            QuestionCreateRequestDTO.ChoiceCreateRequestDTO choiceDto = dto.getChoicesCreate().get(i);
+
+            int choiceNumber = i + 1; // 👈 직접 설정
+
+            Choice choice = new Choice();
+            choice.setQuestion(question);
+            choice.setChoiceNumber(choiceNumber);
+            choice.setChoiceText(choiceDto.getChoiceText());
+            choice.setIsCorrect(choiceNumber == dto.getCorrectAnswer()); // 👈 정답 여부 정확히 비교
+
+            newChoices.add(choice);
+        }
+
+        choiceRepository.saveAll(newChoices);
+    }
+
+    @Transactional
+    public void deleteQuestion(Long questionId) {
+        Question question = questionRepository.findById(questionId)
+            .orElseThrow(() -> new EntityNotFoundException("문제를 찾을 수 없습니다."));
+        
+        // question에 해당하는 answer 먼저 삭제
+        answerRepository.deleteAllByQuestion(question); 
+        
+        // 선택지 먼저 삭제 (FK 연결 때문)
+        choiceRepository.deleteAllByQuestion(question);
+        
+        // 문제 삭제
+        questionRepository.delete(question);
+    }
+
+
+
+
 }

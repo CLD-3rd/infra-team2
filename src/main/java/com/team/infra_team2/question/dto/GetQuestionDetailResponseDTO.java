@@ -1,8 +1,10 @@
 package com.team.infra_team2.question.dto;
-import com.team.infra_team2.choice.entity.Choice;
-import com.team.infra_team2.question.entity.Question;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.team.infra_team2.choice.entity.Choice;
+import com.team.infra_team2.question.entity.Question;
+
 import lombok.Getter; // Lombok @Getter 추가
 
 /**
@@ -15,14 +17,15 @@ public class GetQuestionDetailResponseDTO {
     private Long questionId; //API 명세의 id필드임
     private String questionText;
     private List<GetChoiceResponseDTO> choiceList;
-
+    private Integer correctAnswer;
     /**
      * 문제 상세 DTO 생성자
      */
-    private GetQuestionDetailResponseDTO(Long questionId, String questionText, List<GetChoiceResponseDTO> choiceList) {
+    private GetQuestionDetailResponseDTO(Long questionId, String questionText, List<GetChoiceResponseDTO> choiceList, Integer correctAnswer) {
         this.questionId = questionId;
         this.questionText = questionText;
         this.choiceList = choiceList;
+        this.correctAnswer = correctAnswer;
     }
 
     /**
@@ -35,15 +38,16 @@ public class GetQuestionDetailResponseDTO {
         return new GetQuestionDetailResponseDTO(
             question.getId(),
             question.getQuestionText(),
-            choiceDTOList
+            choiceDTOList,
+            question.getCorrectAnswer()
         );
     }
 
     /**
      * 원시 값을 통해 DTO를 생성하는 팩토리 메서드
      */
-    public static GetQuestionDetailResponseDTO of(Long questionId, String questionText, List<GetChoiceResponseDTO> choiceList) {
-        return new GetQuestionDetailResponseDTO(questionId, questionText, choiceList);
+    public static GetQuestionDetailResponseDTO of(Long questionId, String questionText, List<GetChoiceResponseDTO> choiceList, Integer correctAnswer) {
+        return new GetQuestionDetailResponseDTO(questionId, questionText, choiceList, correctAnswer);
     }
 
     // JSON 직렬화를 위한 별도의 메서드 (API 호환성 유지)

@@ -47,7 +47,9 @@
             <div class="title">문제은행</div>
             <div class="btn-group">
                 <a th:href="@{/api/history}" class="btn btn-outline-primary">History</a>
-                <a th:href="@{/api/auth/logout}" class="btn btn-primary">Log Out</a>
+				<form th:action="@{/api/auth/logout}" method="post" style="display:inline;">
+					<button type="submit" class="btn btn-primary">Log Out</button>
+				</form>
             </div>
         </div>
 
@@ -67,13 +69,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="question : ${questions}">
-                        <td>
-                            <a th:href="@{'/questions/' + ${question.questionId}}" th:text="${question.questionText}"></a>
-                        </td>
-                        <td th:text="${question.author}"></td>
-                        <td th:text="${question.createdAt}"></td>
-                    </tr>
+					<tr th:each="question : ${questions}">
+					    <td>
+					        <form th:action="@{/api/questions/start}" method="post">
+					            <input type="hidden" name="questionId" th:value="${question.questionId}" />
+					            <button type="submit" class="btn btn-link p-0" th:text="${question.questionText}"></button>
+					        </form>
+					    </td>
+					    <td th:text="${question.author}"></td>
+					    <td th:text="${question.createdAt}"></td>
+					</tr>
+
                 </tbody>
             </table>
 

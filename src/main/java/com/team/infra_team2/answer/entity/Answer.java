@@ -12,11 +12,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Answer extends BaseEntity {
 	
@@ -42,4 +42,17 @@ public class Answer extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "solve_id")
 	private Solve solve;
+	
+	private Answer(Integer selectedAnswer, Boolean isCorrect, User user, Question question, Solve solve) {
+		this.selectedAnswer = selectedAnswer;
+		this.isCorrect = isCorrect;
+		this.user = user;
+		this.question = question;
+		this.solve = solve;
+	}
+	
+	public static Answer of(Integer selectedAnswer, Boolean isCorrect, User user, Question question,
+			Solve solve) {
+		return new Answer(selectedAnswer, isCorrect, user, question, solve);
+	}
 }

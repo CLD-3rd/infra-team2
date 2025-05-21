@@ -31,6 +31,11 @@ authorites.add(()-> user.getUserRoleType().getRole());
 return authorites;
 }
 
+public String getRole() {
+    return user.getUserRoleType().getRole();  // 예: "ROLE_ADMIN"
+}
+
+
 @Override
 public String getPassword() {
 return user.getPassword();

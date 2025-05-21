@@ -1,5 +1,6 @@
 package com.team.infra_team2.question.controller;
 
+
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,10 +17,12 @@ import com.team.infra_team2.question.dto.GetQuestionDetailResponseDTO;
 import com.team.infra_team2.question.dto.GetQuestionListResponseDTO;
 import com.team.infra_team2.question.dto.QuestionCreateRequestDTO;
 import com.team.infra_team2.question.service.QuestionService;
+import com.team.infra_team2.solve.repository.SolveRepository;
 import com.team.infra_team2.user.entity.User;
 import com.team.infra_team2.user.repository.UserRepository;
 import com.team.infra_team2.user.security.config.auth.PrincipalDetails;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -28,6 +31,7 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final UserRepository userRepository;
+    private final SolveRepository solveRepository;
 
     // 문제 목록 페이지 (URL: /api/questions)
     @GetMapping("/api/questions")
@@ -62,13 +66,26 @@ public class QuestionController {
     }
 
     // 문제 상세 페이지
-    @GetMapping("/questions/{questionId}")
+    @GetMapping("/api/questions/{questionId}")
     @PreAuthorize("isAuthenticated()")
     public String getQuestionDetail(
-            @PathVariable(name = "questionId") Long questionId, 
+            @PathVariable(name = "questionId") Long questionId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            HttpSession session,
             Model model) {
         GetQuestionDetailResponseDTO response = questionService.getQuestionDetail(questionId);
         model.addAttribute("question", response);
+        
+        // 주석 삭제 
+//        Long solveId = (Long) session.getAttribute("solveId");
+//
+//        
+//        User user = userRepository.findByUsername(principalDetails.getUsername());
+        
+        // 진행 상태 정보 추가
+        model.addAttribute("currentIndex", questionService.getCurrentIndex(questionId));
+        model.addAttribute("totalCount", questionService.getTotalQuestionCount());
+        
         return "question_detail";
     }
 
@@ -94,4 +111,34 @@ public class QuestionController {
         questionService.createQuestion(requestDTO, user);
         return "redirect:/api/questions";
     }
+    
+ // 문제 수정 폼
+    @GetMapping("/api/questions/edit/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
+        GetQuestionDetailResponseDTO dto = questionService.getQuestionDetail(id);
+        model.addAttribute("question", dto);
+        return "question_edit_form"; // 이 템플릿으로 이동
+    }
+
+    // 문제 수정 제출 처리
+    @PostMapping("/api/questions/{id}/edit")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String editQuestion(
+    		@PathVariable("id") Long id,
+            @ModelAttribute QuestionCreateRequestDTO requestDTO) {
+        questionService.updateQuestion(id, requestDTO);
+        return "redirect:/api/questions/" + id; // 수정 완료 후 상세페이지로 이동
+    }
+    
+ // QuestionController.java
+
+    @PostMapping("/api/questions/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String deleteQuestion(@PathVariable("id") Long id) {
+        questionService.deleteQuestion(id);
+        return "redirect:/api/questions"; // 삭제 후 목록 페이지로 이동
+    }
+
+
 }
