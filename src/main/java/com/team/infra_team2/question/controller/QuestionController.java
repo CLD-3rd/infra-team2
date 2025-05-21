@@ -76,10 +76,11 @@ public class QuestionController {
         GetQuestionDetailResponseDTO response = questionService.getQuestionDetail(questionId);
         model.addAttribute("question", response);
         
-        Long solveId = (Long) session.getAttribute("solveId");
-
-        
-        User user = userRepository.findByUsername(principalDetails.getUsername());
+        // 주석 삭제 
+//        Long solveId = (Long) session.getAttribute("solveId");
+//
+//        
+//        User user = userRepository.findByUsername(principalDetails.getUsername());
         
         // 진행 상태 정보 추가
         model.addAttribute("currentIndex", questionService.getCurrentIndex(questionId));

@@ -214,7 +214,8 @@
 <script th:inline="javascript">
     function submitAndFinish() {
         var form = document.getElementById('answerForm');
-        form.action = /*[[@{'/api/answers/' + ${currentSolveId} + '/finish'}]]*/ '';
+		// 이부분 currentId 삭
+        form.action = /*[[@{'/api/answers/' + 'finish'}]]*/ '';
         form.submit();
     }
 </script>
