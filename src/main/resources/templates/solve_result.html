@@ -2,47 +2,138 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>풀이 결과</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .logout-btn { position: absolute; right: 40px; top: 20px; }
-        .table thead { background-color: #f3f5f8; }
+        body {
+            background-color: #f6f9ff;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+		.header-bar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px 20px;
+			background-color: white;
+			border-bottom: 1px solid #e9ecef;
+			}
+
+		.title {
+			font-size: 22px;
+			font-weight: bold;
+			color: #212529;
+		}
+		.subtitle {
+			font-size: 14px;
+			color: #6c757d;
+			 display: block;
+			margin-top: -2px;
+			}
+
+        .btn-logout {
+            color: white;
+            background-color: #0d6efd;
+            border: none;
+            padding: 6px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .btn-logout:hover {
+            background-color: #0b5ed7; /* 더 진한 파랑 */
+			color: white;
+        }
+
+        .result-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .table {
+            background-color: white;
+            border: 1px solid #dee2e6;
+        }
+
+        .table thead {
+            background-color: #f3f5f8;
+            font-weight: 600;
+        }
+
+		.btn-return {
+		    background-color: #0d6efd;
+		    color: white;
+		    border: none;
+		    width: 240px;
+		    height: 48px;
+		    font-size: 16px;
+		    font-weight: 500;
+		    border-radius: 6px;
+		    margin-top: 30px;
+		
+		    display: inline-flex;        /* 핵심 */
+		    align-items: center;
+		    justify-content: center;
+		    vertical-align: middle;      /* inline 요소의 세로 정렬 */
+		    line-height: 1;
+		    white-space: nowrap;
+		    text-decoration: none;
+		
+		    transition: background-color 0.2s ease, color 0.2s ease;
+		}
+		
+		.btn-return:hover {
+		    background-color: #0b5ed7;
+		    color: white;
+		    text-decoration: none;
+		}
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="d-flex align-items-center justify-content-between py-3">
-            <div class="fs-3 fw-bold">문제은행</div>
-			<form th:action="@{/api/auth/logout}" method="post" style="display:inline;">
-				<button type="submit" class="btn btn-primary">Log Out</button>
-			</form>
+    <!-- 상단 바 -->
+    <div class="header-bar">
+        <div>
+            <div class="title">🗳문제은행</div>
+            <div class="subtitle">문제은행</div>
         </div>
+        <form th:action="@{/api/auth/logout}" method="post">
+            <button type="submit" class="btn-logout">Log Out</button>
+        </form>
     </div>
 
-    <div class="container mt-5 text-center">
-        <h2 class="mb-4 fw-bold">수고 하셨습니다.</h2>
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <table class="table table-bordered text-center">
-                    <thead>
-                        <tr>
-                            <th>풀이 ID</th>
-                            <th>풀이 날짜</th>
-                            <th>풀이 문제 수</th>
-                            <th>정답 수</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="history : ${solveHistoryList}">
-                            <td th:text="'# ' + ${history.solveId}"># 1</td>
-                            <td th:text="${history.solvedAt}">2025-05-15</td>
-                            <td th:text="${history.totalQuestion} + '문제'">10문제</td>
-                            <td th:text="${history.correctCount} + '문제'">8문제</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <a th:href="@{/api/questions}" class="btn btn-primary mt-4">목록으로 돌아가기</a>
-            </div>
-        </div>
+    <!-- 결과 영역 -->
+    <div class="result-container">
+        <div class="result-title">수고 하셨습니다.</div>
+
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>풀이 ID</th>
+                    <th>풀이 날짜</th>
+                    <th>풀이 문제 수</th>
+                    <th>정답 수</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="history : ${solveHistoryList}">
+                    <td th:text="'# ' + ${history.solveId}"># 1</td>
+					<td th:text="${#temporals.format(history.solvedAt, 'yyyy년 M월 d일 a h시 mm분')}">2025년 5월 21일 12시 14분</td>
+                    <td th:text="${history.totalQuestion} + '문제'">10문제</td>
+                    <td th:text="${history.correctCount} + '문제'">8문제</td>
+                </tr>
+            </tbody>
+        </table>
+
+		<a th:href="@{/api/questions}" class="btn-return">목록으로 돌아가기</a>
     </div>
 </body>
 </html>
