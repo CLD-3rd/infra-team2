@@ -126,7 +126,7 @@
             <tbody>
                 <tr th:each="history : ${solveHistoryList}">
                     <td th:text="'# ' + ${history.solveId}"># 1</td>
-                    <td th:text="${history.solvedAt}">2025-05-15</td>
+					<td th:text="${#temporals.format(history.solvedAt, 'yyyy년 M월 d일 a h시 mm분')}">2025년 5월 21일 12시 14분</td>
                     <td th:text="${history.totalQuestion} + '문제'">10문제</td>
                     <td th:text="${history.correctCount} + '문제'">8문제</td>
                 </tr>
