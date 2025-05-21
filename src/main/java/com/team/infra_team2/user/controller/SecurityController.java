@@ -1,5 +1,8 @@
 package com.team.infra_team2.user.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,16 +12,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.team.infra_team2.user.entity.User;
+import com.team.infra_team2.user.exception.CustomException;
 import com.team.infra_team2.user.repository.UserRepository;
 import com.team.infra_team2.user.request.UserLoginRequestDTO;
 import com.team.infra_team2.user.request.UserSignupRequestDTO;
 import com.team.infra_team2.user.security.config.auth.PrincipalDetails;
+import com.team.infra_team2.user.service.SecurityService;
+import jakarta.validation.Valid;
 
 
 
@@ -27,15 +34,16 @@ import com.team.infra_team2.user.security.config.auth.PrincipalDetails;
 public class SecurityController {
 
 	private final UserRepository userRepository;
-// 암호화 모듈 주입
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 
+	private final SecurityService securityService;
 	public SecurityController(UserRepository userRepository, PasswordEncoder passwordEncoder,
-			AuthenticationManager authenticationManager) {
+			AuthenticationManager authenticationManager, SecurityService securityService) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.authenticationManager = authenticationManager;
+		this.securityService = securityService;
 	}
 
 	@GetMapping({ "", "/" })
@@ -63,23 +71,29 @@ public class SecurityController {
 		return "login";
 	}
 
-	// model and view
-	@PostMapping("/login")
-	public String customLogin(@ModelAttribute UserLoginRequestDTO dto, Model model) {
-		try {
-			Authentication authentication = authenticationManager
-					.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+		@PostMapping("/login")
+		public String customLogin(@Valid @ModelAttribute UserLoginRequestDTO dto,
+				BindingResult bindingResult, Model model) throws javax.naming.AuthenticationException {
 
-			PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-			model.addAttribute("username", principal.getUsername());
-
-			return "redirect:/api/questions?page=1&size=10"; // 로그인 성공시 이동
-		} catch (AuthenticationException e) {
-			model.addAttribute("error", "로그인 실패: 자격 증명에 실패하였습니다.");
-			return "login"; // 다시 로그인 페이지로
+			if (bindingResult.hasErrors()) {
+		        model.addAttribute("error", bindingResult.getAllErrors().get(0).getDefaultMessage());
+		        return "login";
+		    }
+			
+			try {
+				if (securityService.login(dto)) {
+					String username = securityService.getCurrentUsername();
+					model.addAttribute("username", username);
+					return "redirect:/api/questions?page=1&size=10";
+				}
+			} catch (AuthenticationException e) {
+				model.addAttribute("error", "로그인 실패: 자격 증명에 실패하였습니다.");
+			}
+			return "login";
+			
 		}
-	}
+		
+		
 
 	@GetMapping("/signup")
 	public String signUpPage(Model model) {
@@ -89,16 +103,24 @@ public class SecurityController {
 
 
 	@PostMapping("/signup")
-	public String signUp(@ModelAttribute UserSignupRequestDTO requestDTO, Model model) {
-		String rawPassword = requestDTO.getPassword();
-		String encryptedPassword = passwordEncoder.encode(rawPassword);
+	public String signUp(@Valid @ModelAttribute UserSignupRequestDTO requestDTO,
+	                     BindingResult bindingResult,
+	                     Model model) {
+	    if (bindingResult.hasErrors()) {
+	        model.addAttribute("error", bindingResult.getAllErrors().get(0).getDefaultMessage());
+	        model.addAttribute("userSignupRequestDTO", requestDTO);
+	        return "signup";
+	    }
 
-		User user = requestDTO.toEntity();
-		user.setPassword(encryptedPassword);
-		userRepository.save(user);
-
-		model.addAttribute("username", user.getUsername());
-		return "redirect:/api/auth/login"; // 회원가입 성공 후 로그인 페이지로 리다이렉트
+	    try {
+	        User user = securityService.signup(requestDTO);
+	        model.addAttribute("username", user.getUsername());
+	        return "redirect:/api/auth/login";
+	    } catch (CustomException e) {
+	        model.addAttribute("error", e.getMessage());
+	        model.addAttribute("userSignupRequestDTO", requestDTO);
+	        return "signup";
+	    }
 	}
 
 //@PreAuthorize("hasRole('ROLE_USER)') or hasRole('ROLE_MANAGER')")

@@ -12,14 +12,18 @@
     <!-- POST 요청을 /api/auth/signup 으로 보냄 -->
     <!-- th:object는 컨트롤러에서 전달한 DTO 객체 -->
     <form th:action="@{/api/auth/signup}" th:object="${userSignupRequestDTO}" method="post">
-        <div class="mb-3">
-            <label for="username" class="form-label">아이디</label>
-            <input type="text" th:field="*{username}" class="form-control" id="username" required>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">비밀번호</label>
-            <input type="password" th:field="*{password}" class="form-control" id="password" required>
-        </div>
+			<div class="mb-3">
+			    <label for="username" class="form-label">아이디</label>
+			    <input type="text" th:field="*{username}" class="form-control" id="username" required>
+			    <div th:if="${#fields.hasErrors('username')}" class="text-danger" th:errors="*{username}"></div>
+			</div>
+			
+			<!-- 비밀번호 입력 -->
+			<div class="mb-3">
+			    <label for="password" class="form-label">비밀번호</label>
+			    <input type="password" th:field="*{password}" class="form-control" id="password" required>
+			    <div th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></div>
+			</div>
         <button type="submit" class="btn btn-primary">회원가입</button>
     </form>
 
