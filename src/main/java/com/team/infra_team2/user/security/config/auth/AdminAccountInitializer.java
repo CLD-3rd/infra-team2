@@ -36,5 +36,8 @@ public class AdminAccountInitializer implements ApplicationListener<ApplicationR
 	            // 저장
 	            userRepository.save(admin);
 	        }
+        	UserDTO userDto = new UserDTO("test123", passwordEncoder.encode("test123!"), UserRoleType.USER);
+        	User admin = userDto.toEntity();
+        	userRepository.save(admin);
 	    }
 }
