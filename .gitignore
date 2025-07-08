@@ -32,3 +32,8 @@ replay_pid*
 
 # Eclipse settings
 .settings/
+
+# Eclipse specific
+.classpath
+.project
+.factorypath
