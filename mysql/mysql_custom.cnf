@@ -1,0 +1,22 @@
+[client]
+default-character-set=utf8mb4
+
+[mysql]
+default-character-set=utf8mb4
+
+[mysqldump]
+default-character-set=utf8mb4
+
+[mysqld]
+port=3307
+init_connect='SET NAMES utf8mb4; SET collation_connection = utf8_general_ci;'
+character-set-server=utf8mb4
+collation-server=utf8mb4_unicode_ci
+
+log-error=/logs/mysql-error.log
+slow_query_log=1
+slow_query_log_file=/logs/mysql-slow.log
+long_query_time=2
+
+general_log=1
+general_log_file=/logs/mysql-general.log
